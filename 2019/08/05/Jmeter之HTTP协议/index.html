@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: ''
+    },
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="不同角色眼中的接口不同视角的接口 开发眼中的接口 模块与模块之间的对接方式定义   测试眼中的接口 可以独立部署成服务的协议接口  常见的接口协议 HTTP 超文本传输协议 HTTPS 安全超文本传输协议 FTP 文件传输协议 TCP 网络控制协议 IP 互联网协议 UDP 用户数据协议  http协议栈中的位置http协议响应码每一个响应码都对应了一种服务器的响应状态1xx：信息响应类，表示接收">
+<meta name="keywords" content="http">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP协议">
+<meta property="og:url" content="http://yoursite.com/2019/08/05/Jmeter之HTTP协议/index.html">
+<meta property="og:site_name" content="blue的个人博客">
+<meta property="og:description" content="不同角色眼中的接口不同视角的接口 开发眼中的接口 模块与模块之间的对接方式定义   测试眼中的接口 可以独立部署成服务的协议接口  常见的接口协议 HTTP 超文本传输协议 HTTPS 安全超文本传输协议 FTP 文件传输协议 TCP 网络控制协议 IP 互联网协议 UDP 用户数据协议  http协议栈中的位置http协议响应码每一个响应码都对应了一种服务器的响应状态1xx：信息响应类，表示接收">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-05T14:15:11.094Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP协议">
+<meta name="twitter:description" content="不同角色眼中的接口不同视角的接口 开发眼中的接口 模块与模块之间的对接方式定义   测试眼中的接口 可以独立部署成服务的协议接口  常见的接口协议 HTTP 超文本传输协议 HTTPS 安全超文本传输协议 FTP 文件传输协议 TCP 网络控制协议 IP 互联网协议 UDP 用户数据协议  http协议栈中的位置http协议响应码每一个响应码都对应了一种服务器的响应状态1xx：信息响应类，表示接收">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/08/05/Jmeter之HTTP协议/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  
+  <title>HTTP协议 | blue的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">blue的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">每天学习进步，贵在坚持</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/05/Jmeter之HTTP协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="blue">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blue的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HTTP协议
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-05 12:30:30 / 修改时间：22:15:11" itemprop="dateCreated datePublished" datetime="2019-08-05T12:30:30+08:00">2019-08-05</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="不同角色眼中的接口"><a href="#不同角色眼中的接口" class="headerlink" title="不同角色眼中的接口"></a>不同角色眼中的接口</h4><h5 id="不同视角的接口"><a href="#不同视角的接口" class="headerlink" title="不同视角的接口"></a>不同视角的接口</h5><ol>
+<li>开发眼中的接口<blockquote>
+<p>模块与模块之间的对接方式定义</p>
+</blockquote>
+</li>
+<li>测试眼中的接口<blockquote>
+<p>可以独立部署成服务的协议接口</p>
+</blockquote>
+<h5 id="常见的接口协议"><a href="#常见的接口协议" class="headerlink" title="常见的接口协议"></a>常见的接口协议</h5></li>
+<li>HTTP 超文本传输协议</li>
+<li>HTTPS 安全超文本传输协议</li>
+<li>FTP 文件传输协议</li>
+<li>TCP 网络控制协议</li>
+<li>IP 互联网协议</li>
+<li>UDP 用户数据协议</li>
+</ol>
+<h5 id="http协议栈中的位置"><a href="#http协议栈中的位置" class="headerlink" title="http协议栈中的位置"></a>http协议栈中的位置</h5><h5 id="http协议响应码"><a href="#http协议响应码" class="headerlink" title="http协议响应码"></a>http协议响应码</h5><p>每一个响应码都对应了一种服务器的响应状态<br>1xx：信息响应类，表示接收到请求并且继续处理（中间状态）<br>2xx：处理成功响应类，表示动作被成功接受、理解和接受<br>3xx：重定向响应类，为了完成指定的动作，必须接受一步处理<br>4xx：客户端错误，客户端请求包含语法错误或者是不能正确执行<br>5xx: 服务端错误，服务器不能正确执行一个正确的请求。</p>
+<h5 id="http协议响应模型：一次请求的生命周期或简单的软件分层"><a href="#http协议响应模型：一次请求的生命周期或简单的软件分层" class="headerlink" title="http协议响应模型：一次请求的生命周期或简单的软件分层"></a>http协议响应模型：一次请求的生命周期或简单的软件分层</h5><p>场景：登录</p>
+<ol>
+<li>客户端发起请求到api接口层<br> 1.1 用户在客户端填写用户名和密码，点击登录，发送请求</li>
+<li>api接收到客户端发起的用户请求<br> 2.1 api对业务逻辑进行验证<pre><code>2.1.1 验证用户名和密码是否合法
+    + 比如：用户名要求必须为真实手机号码
+    + 如果验证失败，需要给客户端返回响应码
+    比如码值为1，2，3
+    1 代表用户名格式错误
+    2 代表用户名或密码错误
+    3 代表密码格式错误</code></pre></li>
+<li>api会将用户输入的数据发给db层<br> Create、Read、Update、Delete（基本不用）<br> select * from user where userName = ‘’ and password = ‘’;<br> 3.1 数据库查询成功则返回1，失败则返回0</li>
+<li>DB会将返回的查询数据库的条目数给api</li>
+<li>api返回成功或失败的状态码给客户端</li>
+<li>客户端将返回信息提示给用户</li>
+</ol>
+<p>一、 客户端<br>    功能测试、性能测试、自动化测试</p>
+<p>二、 接口层<br>    接口测试，功能测试、性能测试、自动化测试</p>
+<p>三、 数据库层<br>    可以将开发人员使用到的sql语句单独拿出来进行性能测试</p>
+<h5 id="常用的http协议的请求方式"><a href="#常用的http协议的请求方式" class="headerlink" title="常用的http协议的请求方式"></a>常用的http协议的请求方式</h5><p>HTTP/1.1协议中共定义了八种方法(有时也叫“动作”)，来表明Request-URL指定的资源不同的操作方式</p>
+<ol>
+<li>OPIONS<br> 返回服务器针对特定资源所支持的HTTP请求方法，也可以利用web服务器发送“ * ”的请求来测试服务器的功能性</li>
+<li>HEAD<br> 向服务器索与GET请求相一致的响应，只不过响应体将不会被返回。这一方法可以再不必传输整个响应内容的情况下，就可以获取包含在响应消息头中元信息。</li>
+<li>GET<br><code>http://127.0.0.1:8080?username=blue&amp;pwd=123</code><br> 向特定的资源发出请求。<br> 注意：GET方法不应当被用于产生“副作用”的操作中，例如在Web APplication中，其中一个原因是GET可能会被网络蜘蛛等随意访问。</li>
+<li>POST<br><code>http://127.0.0.1:8080</code><br> 向指定资源提交数据进行处理请求（例如提交表当或者上传文件）。<br> 数据被包含在请求体中。<br> POST请求可能会导致新的资源的建立和/或已有的资源的修改。<br> post请求的参数在请求体里<br> 请求体 {<pre><code>[
+    &apos;username&apos; : &apos;blue&apos;,
+    &apos;pwd&apos;      : &apos;123&apos;
+]</code></pre> }</li>
+<li>PUT<br> 向指定资源位置上传其最新的内容</li>
+<li>DELETE<br> 请求服务器删除Request-URL所标识的资源</li>
+<li>TRACE<br> 回显服务器收到的请求，主要用于测试或诊断</li>
+<li>CONNECT<br> HTTP/1.1协议中预留给能够将连接改为管道方式的代理服务器。<br>注意：<br>1) 方法名称是区分大小写的，<br> 当某个服务器所针对的资源不支持对应的请求方法的时候，服务器应当返回状态码 405(Method Not Allowed)<br> 当服务器不认识或者不支持对应的请求方法时，应当返回状态码 501（Not Implemented）<br>2) HTTP服务器至少应该实现GET和HEAD/POST方法，其他方法都是可选的<h5 id="JMeter的功能介绍"><a href="#JMeter的功能介绍" class="headerlink" title="JMeter的功能介绍"></a>JMeter的功能介绍</h5>一、 BS架构应用性能</li>
+</ol>
+<p>二、 HTTP协议接口功能与性能</p>
+<p>三、 FTP协议接口功能与性能</p>
+<hr>
+<p>一、 Mysql数据库性能</p>
+<p>二、 MongoDB数据库性能</p>
+<p>三、 支持自定义java组件开发</p>
+<h4 id="NODE基础"><a href="#NODE基础" class="headerlink" title="NODE基础"></a>NODE基础</h4><ul>
+<li>npm包管理</li>
+<li>node基础API</li>
+<li>基于node搭建一个简单的后台服务<h4 id="AJAX及库的封装"><a href="#AJAX及库的封装" class="headerlink" title="AJAX及库的封装"></a>AJAX及库的封装</h4></li>
+<li>AJAX基础知识</li>
+<li>基于Promise分装ajax库</li>
+<li>axios</li>
+<li>fetch</li>
+</ul>
+<h4 id="内网IP（局域网）"><a href="#内网IP（局域网）" class="headerlink" title="内网IP（局域网）"></a>内网IP（局域网）</h4><ol>
+<li>在一个区域内，大家连接的是同一个网络（准确来说：连接同一个WIFI不一定是同一个网络，连接不同WIFI也可能是相同的网络，一切都看路由交换机的配置），这就是局域网。</li>
+<li>在同一个局域网下，成员可以相互访问（你的电脑连接了A网络，手机也连接了A网络，那么手机可以访问电脑上的一些信息了 =》 这样可以做移动开发时候的手机联调）</li>
+<li>IPv4地址、子网掩码、DNS服务器这三个比较重要<blockquote>
+<p>子网掩码和DNS相同，IP地址类似，而且都是在相同一个区域下，这样一般情况下都是同一个局域网了。</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>DNS(Domain Name System， 域名系统)，万维网上作为域名和IP地址相互映射的一个分布式数据库（域名解析成功会在DNS系统中记录一条信息，“<a href="http://www.xxx.com" target="_blank" rel="noopener">www.xxx.com</a> xxx.xxx.xx.xxx” 保证以后访问域名，可以直接找到外网IP，通过外网IP访问到服务器） </p>
+</blockquote>
+<blockquote>
+<p>Hbuilder也提供了联调的功能（代码加断点，手机访问，程序会走断点）</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+      
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/http/" rel="tag"># http</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/05/javaScript之函数柯里化/" rel="next" title="javaScript之函数柯里化">
+                <i class="fa fa-chevron-left"></i> javaScript之函数柯里化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  
+    <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="blue">
+  
+  <p class="site-author-name" itemprop="name">blue</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+
+
+  <nav class="site-state motion-element">
+    
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+
+    
+
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+          
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#不同角色眼中的接口"><span class="nav-number">1.</span> <span class="nav-text">不同角色眼中的接口</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#不同视角的接口"><span class="nav-number">1.1.</span> <span class="nav-text">不同视角的接口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常见的接口协议"><span class="nav-number">1.2.</span> <span class="nav-text">常见的接口协议</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#http协议栈中的位置"><span class="nav-number">1.3.</span> <span class="nav-text">http协议栈中的位置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#http协议响应码"><span class="nav-number">1.4.</span> <span class="nav-text">http协议响应码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#http协议响应模型：一次请求的生命周期或简单的软件分层"><span class="nav-number">1.5.</span> <span class="nav-text">http协议响应模型：一次请求的生命周期或简单的软件分层</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#常用的http协议的请求方式"><span class="nav-number">1.6.</span> <span class="nav-text">常用的http协议的请求方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#JMeter的功能介绍"><span class="nav-number">1.7.</span> <span class="nav-text">JMeter的功能介绍</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NODE基础"><span class="nav-number">2.</span> <span class="nav-text">NODE基础</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AJAX及库的封装"><span class="nav-number">3.</span> <span class="nav-text">AJAX及库的封装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#内网IP（局域网）"><span class="nav-number">4.</span> <span class="nav-text">内网IP（局域网）</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-fas fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">blue</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  
+
+  
+
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// GET RESPONSIVE HEIGHT PASSED FROM IFRAME
+
+window.addEventListener("message", function(e) {
+  var data = e.data;
+  if ((typeof data === 'string') && (data.indexOf('ciu_embed') > -1)) {
+    var featureID = data.split(':')[1];
+    var height = data.split(':')[2];
+    $(`iframe[data-feature=${featureID}]`).height(parseInt(height) + 30);
+  }
+}, false);
+</script>
+
+
+
+
+
+
+
+
+  
+
+</body>
+</html>
