@@ -107,7 +107,7 @@
 <meta property="og:site_name" content="blue的个人博客">
 <meta property="og:description" content="什么是惰性函数JS惰性函数，是针对优化频繁使用的函数。常用于函数库的编写、单例模式之中。 需求我们现在需要写一个foo函数，这个函数返回首次调用时的Date对象。 解决一：普通方法123456var t;function foo() &amp;#123;    if(t) return t;    t = new Date();    return t;&amp;#125;  这里有两个问题存在：  声明了一个全">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-06T00:25:32.015Z">
+<meta property="og:updated_time" content="2019-08-06T14:36:20.294Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="javaScript之惰性函数">
 <meta name="twitter:description" content="什么是惰性函数JS惰性函数，是针对优化频繁使用的函数。常用于函数库的编写、单例模式之中。 需求我们现在需要写一个foo函数，这个函数返回首次调用时的Date对象。 解决一：普通方法123456var t;function foo() &amp;#123;    if(t) return t;    t = new Date();    return t;&amp;#125;  这里有两个问题存在：  声明了一个全">
@@ -381,7 +381,7 @@
                 
               
 
-              <time title="创建时间：2019-08-06 08:16:27 / 修改时间：08:25:32" itemprop="dateCreated datePublished" datetime="2019-08-06T08:16:27+08:00">2019-08-06</time>
+              <time title="创建时间：2019-08-06 08:16:27 / 修改时间：22:36:20" itemprop="dateCreated datePublished" datetime="2019-08-06T08:16:27+08:00">2019-08-06</time>
             </span>
           
 
@@ -439,6 +439,27 @@
 </ol>
 <h5 id="解决二：闭包"><a href="#解决二：闭包" class="headerlink" title="解决二：闭包"></a>解决二：闭包</h5><p>解决全局变量污染，闭包就非常的合适</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> t;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(t) <span class="keyword">return</span> t;</span><br><span class="line">        t = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">        <span class="keyword">return</span> t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>解决了变量全局污染的问题，但是没有解决调用时必须进行一次判断的问题</p>
+<h4 id="解决三：函数对象"><a href="#解决三：函数对象" class="headerlink" title="解决三：函数对象"></a>解决三：函数对象</h4><p>函数也是一种对象，利用这个特性，我们也可以解决这个问题</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(foo.t) <span class="keyword">return</span> foo.t;</span><br><span class="line">    foo.t = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">    <span class="keyword">return</span> foo.t</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>依旧没有解决调用时必须进行一次判断的问题。</p>
+<h4 id="解决四：惰性函数"><a href="#解决四：惰性函数" class="headerlink" title="解决四：惰性函数"></a>解决四：惰性函数</h4><p>惰性函数就是解决每次都要进行判断的这个问题，解决原理很简单，重写函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> t = <span class="keyword">new</span> <span class="built_in">Date</span>();</span><br><span class="line">    foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> t;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> foo();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="更多应用"><a href="#更多应用" class="headerlink" title="更多应用"></a>更多应用</h4><p>DOM事件添加中，为了兼容现代浏览器和IE浏览器，我们需要对浏览器环境进行一次判断：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//简化写法</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addEvent</span>(<span class="params">type, el, fn</span>) </span>&#123;</span><br><span class="line">    el.addEventListener(type, fn, <span class="literal">false</span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">window</span>.attachEvent) &#123;</span><br><span class="line">        el.attachEvent(<span class="string">'on'</span> + type, fn);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>问题在于我们每当使用一次addEvent时都会进行一次判断。</p>
+<p>利用惰性函数，我们可以这样做：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addEvent</span>(<span class="params">type, el, fn</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">window</span>.addEventListener) &#123;</span><br><span class="line">        addEvent = <span class="function"><span class="keyword">function</span>(<span class="params">type, el, fn</span>) </span>&#123;</span><br><span class="line">            el.addEventListener(type, fn, <span class="literal">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">window</span>.attachEvent) &#123;</span><br><span class="line">        addEvent = <span class="function"><span class="keyword">function</span>(<span class="params">type, el, fn</span>) </span>&#123;</span><br><span class="line">            addEvent = <span class="function"><span class="keyword">function</span>(<span class="params">type, el, fn</span>) </span>&#123;</span><br><span class="line">                el.attachEvent(<span class="string">'on'</span> + type, fn)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们也可以使用闭包的写法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> addEvent = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">window</span>.addEventListener) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">type, el, fn</span>) </span>&#123;</span><br><span class="line">            el.addEventListener(type, fn, <span class="literal">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">window</span>.attachEvent) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">type, el, fn</span>) </span>&#123;</span><br><span class="line">            el.attachEvent(<span class="string">'on'</span> + type, fn);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>当我们每次都需要进行条件判断，其实只需判断一次，接下来的使用方式都不会发生改变的时候，想想是否可以考虑使用惰性函数。</p>
+
       
     </div>
 
@@ -563,7 +584,7 @@
         
           <a href="/archives/">
         
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -623,7 +644,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是惰性函数"><span class="nav-number">1.</span> <span class="nav-text">什么是惰性函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#需求"><span class="nav-number">2.</span> <span class="nav-text">需求</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#解决一：普通方法"><span class="nav-number">2.1.</span> <span class="nav-text">解决一：普通方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解决二：闭包"><span class="nav-number">2.2.</span> <span class="nav-text">解决二：闭包</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是惰性函数"><span class="nav-number">1.</span> <span class="nav-text">什么是惰性函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#需求"><span class="nav-number">2.</span> <span class="nav-text">需求</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#解决一：普通方法"><span class="nav-number">2.1.</span> <span class="nav-text">解决一：普通方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解决二：闭包"><span class="nav-number">2.2.</span> <span class="nav-text">解决二：闭包</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决三：函数对象"><span class="nav-number">3.</span> <span class="nav-text">解决三：函数对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决四：惰性函数"><span class="nav-number">4.</span> <span class="nav-text">解决四：惰性函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更多应用"><span class="nav-number">5.</span> <span class="nav-text">更多应用</span></a></li></ol></div>
             
 
           </div>
