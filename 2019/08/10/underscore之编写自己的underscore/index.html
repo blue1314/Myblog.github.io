@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: ''
+    },
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="原文来自冴羽的博客 自己的实现1234567891011121314151617(function() &amp;#123;  var root = this;  var _ = &amp;#123;&amp;#125;;  root._ = _;  //这里添加自己的方法  _.reverse = function(string) &amp;#123;    return string      .split(&quot;&quot;)">
+<meta name="keywords" content="underscore">
+<meta property="og:type" content="article">
+<meta property="og:title" content="underscore之编写自己的underscore">
+<meta property="og:url" content="http://yoursite.com/2019/08/10/underscore之编写自己的underscore/index.html">
+<meta property="og:site_name" content="blue的个人博客">
+<meta property="og:description" content="原文来自冴羽的博客 自己的实现1234567891011121314151617(function() &amp;#123;  var root = this;  var _ = &amp;#123;&amp;#125;;  root._ = _;  //这里添加自己的方法  _.reverse = function(string) &amp;#123;    return string      .split(&quot;&quot;)">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-10T12:09:47.390Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="underscore之编写自己的underscore">
+<meta name="twitter:description" content="原文来自冴羽的博客 自己的实现1234567891011121314151617(function() &amp;#123;  var root = this;  var _ = &amp;#123;&amp;#125;;  root._ = _;  //这里添加自己的方法  _.reverse = function(string) &amp;#123;    return string      .split(&quot;&quot;)">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/08/10/underscore之编写自己的underscore/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  
+  <title>underscore之编写自己的underscore | blue的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">blue的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">每天学习进步，贵在坚持</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/10/underscore之编写自己的underscore/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="blue">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blue的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">underscore之编写自己的underscore
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-10 14:55:50 / 修改时间：20:09:47" itemprop="dateCreated datePublished" datetime="2019-08-10T14:55:50+08:00">2019-08-10</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://github.com/mqyqingfeng/Blog/issues/56" target="_blank" rel="noopener">原文来自冴羽的博客</a></p>
+<h4 id="自己的实现"><a href="#自己的实现" class="headerlink" title="自己的实现"></a>自己的实现</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> root = <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> _ = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  root._ = _;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//这里添加自己的方法</span></span><br><span class="line">  _.reverse = <span class="function"><span class="keyword">function</span>(<span class="params">string</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> string</span><br><span class="line">      .split(<span class="string">""</span>)</span><br><span class="line">      .reverse()</span><br><span class="line">      .join(<span class="string">""</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用</span></span><br><span class="line">_.reverse(<span class="string">"blue"</span>); <span class="comment">// eulb</span></span><br></pre></td></tr></table></figure>
+
+<p>这里将所有的方法添加到一个名为 _ 的对象上，然后将该对象挂载到全局对象上。</p>
+<p>之所以不直接 window._ = _ 是因为这里编写的是一个工具函数，不仅要求可以运行在浏览器端，还可以运行在如 Node 环境中。</p>
+<h4 id="root"><a href="#root" class="headerlink" title="root"></a>root</h4><p><code>var root = this</code> 这里的 this 在严格模式下是 underfined，为了避免报错我们需要做兼容。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> root =</span><br><span class="line">  (<span class="keyword">typeof</span> <span class="built_in">window</span> == <span class="string">"object"</span> &amp;&amp; <span class="built_in">window</span>.window == <span class="built_in">window</span> &amp;&amp; <span class="built_in">window</span>) ||</span><br><span class="line">  (<span class="keyword">typeof</span> global == <span class="string">"object"</span> &amp;&amp; global.global == global &amp;&amp; global);</span><br></pre></td></tr></table></figure>
+
+<p>事实上，除了 window 和 global 之外，还有一个叫 Web Worker 的东西</p>
+<h4 id="Web-Worker"><a href="#Web-Worker" class="headerlink" title="Web Worker"></a>Web Worker</h4><p>Web Worker 属于 HTML5 中的内容。</p>
+<blockquote>
+<p>在 Web Worker 标准中，定义了解决客户端 JavaScript 无法多线程的问题。其中定义的“worker”是指执行代码的并行过程，不够，Web Worker 处在一个自包含的执行环境中，其无法方法 Window 对象和 Document 对象，和主线程之间的通信只能通过异步消息传递机制来实现。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Web Worker</span></span><br><span class="line"><span class="comment"> * 在火狐中可以直接打开测试，在 Chrome 中需要起服务器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">timedCount</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    i = i + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'window 对象为:'</span>, <span class="keyword">typeof</span> <span class="built_in">window</span>)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'global 对象为:'</span>, <span class="keyword">typeof</span> global)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'self 对象为：'</span>, self)</span><br><span class="line">    <span class="keyword">var</span> root = (<span class="keyword">typeof</span> <span class="built_in">window</span> == <span class="string">'object'</span> &amp;&amp; <span class="built_in">window</span>.window == <span class="built_in">window</span> &amp;&amp; <span class="built_in">window</span>) ||</span><br><span class="line">               (<span class="keyword">typeof</span> global == <span class="string">'object'</span> &amp;&amp; global.global == global &amp;&amp; global);</span><br><span class="line">    <span class="built_in">console</span>.log(root)</span><br><span class="line">    postMessage(i);</span><br><span class="line">    setTimeout(<span class="string">"timedCount()"</span>, <span class="number">500</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">timedCount();</span><br><span class="line"></span><br><span class="line"><span class="comment">// webworker.html</span></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">"utf-8"</span>&gt;</span><br><span class="line">&lt;<span class="regexp">/head&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">&lt;body&gt;</span></span><br><span class="line"><span class="regexp">    &lt;p&gt;Count numbers:</span></span><br><span class="line"><span class="regexp">        &lt;output id="result"&gt;&lt;/</span>output&gt;</span><br><span class="line">    &lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">    &lt;button onclick="startWorker()"&gt;Start Worker&lt;/</span>button&gt;</span><br><span class="line">    &lt;button onclick=<span class="string">"stopWorker()"</span>&gt;Stop Worker&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">    &lt;script&gt;</span></span><br><span class="line"><span class="regexp">    var w;</span></span><br><span class="line"><span class="regexp">    function startWorker() &#123;</span></span><br><span class="line"><span class="regexp">        if (typeof(Worker) !== "undefined") &#123;</span></span><br><span class="line"><span class="regexp">            if (typeof(w) == "undefined") &#123;</span></span><br><span class="line"><span class="regexp">                w = new Worker("./i</span>ndex.js<span class="string">");</span></span><br><span class="line"><span class="string">            &#125;</span></span><br><span class="line"><span class="string">            w.onmessage = function(event) &#123;</span></span><br><span class="line"><span class="string">                document.getElementById("</span>result<span class="string">").innerHTML = event.data;</span></span><br><span class="line"><span class="string">            &#125;</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">        else &#123;</span></span><br><span class="line"><span class="string">            document.getElementById("</span>result<span class="string">").innerHTML = "</span>Sorry, your browser does not support Web Workers...<span class="string">";</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">    function stopWorker() &#123;</span></span><br><span class="line"><span class="string">        w.terminate();</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">    &lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;/body&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在 Web Worker 中，是无法访问到 Window 对象的，所以 <code>typeof window</code> 和<code>typeof global</code>的结果都是 undefined，所以最终 root 的值为 false，然后会报错。</p>
+<p>虽然在 Web Worker 中不能反问道 Window 对象，但是我们却能通过 self 访问到 Worker 环境中的全局对象，这里就可以挂载到 self 这个对象上。</p>
+<p>在浏览器中，除了 window 属性，我们也可以通过 self 属性直接访问到 Window 对象。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.window === <span class="built_in">window</span>); <span class="comment">// true;</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.self === <span class="built_in">window</span>); <span class="comment">// true;</span></span><br></pre></td></tr></table></figure>
+
+<p>既然 self 的通用性更高，那原来的代码就可以改为下面</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> root =</span><br><span class="line">  (<span class="keyword">typeof</span> self == <span class="string">"object"</span> &amp;&amp; self.self == self &amp;&amp; self) ||</span><br><span class="line">  (<span class="keyword">typeof</span> global == <span class="string">"object"</span> &amp;&amp; global.global == global &amp;&amp; global);</span><br></pre></td></tr></table></figure>
+
+<h4 id="node-vm"><a href="#node-vm" class="headerlink" title="node vm"></a>node vm</h4><p>依然没完，在 node 的 vm 模块中，也就是沙盒模块，runlnContext 方法中，是不存在 window，也不存在 global 变量的</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * http://www.alloyteam.com/2015/04/xiang-jie-nodejs-di-vm-mo-kuai/</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> vm = <span class="built_in">require</span>(<span class="string">"vm"</span>);</span><br><span class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">"util"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> <span class="built_in">window</span> = &#123;</span><br><span class="line">  p: <span class="number">2</span>,</span><br><span class="line">  vm: vm,</span><br><span class="line">  <span class="built_in">console</span>: <span class="built_in">console</span>,</span><br><span class="line">  <span class="built_in">require</span>: <span class="built_in">require</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">global.p = <span class="number">11</span>;</span><br><span class="line"></span><br><span class="line">vm.createContext(<span class="built_in">window</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// global是 undefined</span></span><br><span class="line"><span class="comment">// vm.runInContext('p = 3;console.log(global);', window);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 报错 window is not defined</span></span><br><span class="line"><span class="comment">// vm.runInContext('p = 3;console.log(window);', window);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// this 是有值的</span></span><br><span class="line">vm.runInContext(<span class="string">"p = 3;console.log(this);"</span>, <span class="built_in">window</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// console.log(window.p);// 被改变为3</span></span><br><span class="line"><span class="comment">// console.log(util.inspect(window));</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以通过 this 来访问到全局对象，所以代码可以写成：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> root =</span><br><span class="line">  (<span class="keyword">typeof</span> self == <span class="string">"object"</span> &amp;&amp; self.self == self &amp;&amp; self) ||</span><br><span class="line">  (<span class="keyword">typeof</span> global == <span class="string">"object"</span> &amp;&amp; global.global == global &amp;&amp; global) ||</span><br><span class="line">  <span class="keyword">this</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="微信小程序"><a href="#微信小程序" class="headerlink" title="微信小程序"></a>微信小程序</h4><p>到此依旧没有完，在微信小程序中，window 和 global 都是 undefined，加上使用严格模式，this 为 undefined，挂载就会发生错误，所以代码要改写成:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> root = (<span class="keyword">typeof</span> self == <span class="string">'object'</span> &amp;&amp; self.self == self &amp;&amp; self) ||</span><br><span class="line">           (<span class="keyword">typeof</span> global == <span class="string">'object'</span> &amp;&amp; global.global == global &amp;&amp; global)</span><br><span class="line">           || <span class="keyword">this</span></span><br><span class="line">           &#123;&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>通过这些步骤下来，我们应该明白，代码的健壮性不是一蹴而就的，而是汇集了很多人的经验，考虑到了很多我们意想不到的地方。</p>
+<h4 id="函数对象"><a href="#函数对象" class="headerlink" title="函数对象"></a>函数对象</h4><p>现在来看看 <code>var _ = {}</code><br>如果仅仅设置 _ 为一个空对象，我们调用方法的时候，只能使用 _.reverse(‘hello’)的方式，实际上，underscore 也支持类似面向对象的方法调用，即：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_(<span class="string">"hello"</span>).reverse(); <span class="comment">// 'olleh'</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//函数式风格</span></span><br><span class="line">_.each([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="function"><span class="keyword">function</span>(<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(item);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">_([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]).each(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(item);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>既然能以 <code>_([1,2,3])</code>的形式可以执行，就表明 ‘_‘ 不是一个字面量对象，而是一个函数！<br>幸运的式，JavaScript 中 函数也是一种对象</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _ = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">_.value = <span class="number">1</span>;</span><br><span class="line">_.log = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.value + <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(_.value); <span class="comment">// 1</span></span><br><span class="line"><span class="built_in">console</span>.log(_.log()); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+
+<p>既然函数的通用性更高，那么就可以把自定以的函数定义在 <code>_</code> 函数上！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> root =</span><br><span class="line">  (<span class="keyword">typeof</span> self == <span class="string">"object"</span> &amp;&amp; self.self == self &amp;&amp; self) ||</span><br><span class="line">  (<span class="keyword">typeof</span> global == <span class="string">"object"</span> &amp;&amp; global.global == global &amp;&amp; global) ||</span><br><span class="line">  <span class="keyword">this</span> ||</span><br><span class="line">  &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> _ = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line">root._ = _;</span><br></pre></td></tr></table></figure>
+
+<p>如何做到 <code>_([1, 2, 3]).each(...)</code>呢？即 _ 函数返回一个对象，这个对象，如何调用挂在 _ 函数上的方法呢？</p>
+<p>这里先来看看 underscore 中是如何做到的</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _ = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!(<span class="keyword">this</span> <span class="keyword">instanceof</span> _)) <span class="keyword">return</span> <span class="keyword">new</span> _(obj);</span><br><span class="line">  <span class="keyword">this</span>._wrapped = obj;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">_([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);</span><br></pre></td></tr></table></figure>
+
+<p>_([1, 2, 3])的执行过程如下：</p>
+<ol>
+<li>执行 <code>this instanceof _</code>, this 指向 window, <code>window instanceof _</code>为 false， !操作符取反，所以执行 <code>new _(obj)</code>.</li>
+<li><code>new _(obj)</code>中，this 指向实例对象，<code>this instanceof _</code>为 true，取反后，代码接着执行</li>
+<li>执行 <code>this._wrapped = obj</code>，函数执行结束</li>
+<li>总结，_([1, 2, 3])返回一个对象， 为<code>{_wrapped: [1, 2, 3]}</code>, 该对象的原型指向 _.prototype</li>
+</ol>
+<p>我们是将方法挂载到 _ 函数对象上，并没有挂到函数的原型上，所以返回的实例是没有办法调用 _ 函数对象上的方法的！</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> root =</span><br><span class="line">    (<span class="keyword">typeof</span> self == <span class="string">"object"</span> &amp;&amp; self.self == self &amp;&amp; self) ||</span><br><span class="line">    (<span class="keyword">typeof</span> global == <span class="string">"object"</span> &amp;&amp; global.global == global &amp;&amp; global) ||</span><br><span class="line">    <span class="keyword">this</span> ||</span><br><span class="line">    &#123;&#125;;</span><br><span class="line">  <span class="keyword">var</span> _ = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!(<span class="keyword">this</span> <span class="keyword">instanceof</span> _)) <span class="keyword">return</span> <span class="keyword">new</span> _(obj);</span><br><span class="line">    <span class="keyword">this</span>._wrapped = obj;</span><br><span class="line">  &#125;;</span><br><span class="line">  root._ = _;</span><br><span class="line"></span><br><span class="line">  _.log = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(_); <span class="comment">// function(obj)&#123; ... &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(_(<span class="number">1</span>)); <span class="comment">// _&#123;_wrapped : 1&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> _()); <span class="comment">// object</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> _); <span class="comment">// function</span></span><br><span class="line"></span><br><span class="line">_().log(); <span class="comment">//_( ... ) log is not a function</span></span><br></pre></td></tr></table></figure>
+
+<p>我们需要一个方法将 _ 上的方法复制到 <em>.prototype 上，这个方法就是 \</em>.mixin.</p>
+<h4 id="functions"><a href="#functions" class="headerlink" title="_.functions"></a>_.functions</h4><p>为了将 _ 上的方法复制到原型上，首先我们要获得 _ 上的方法，所以我们先写个 <code>_.functions</code>方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">_.functions = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> names = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">    <span class="keyword">if</span> (_.isFunction(obj[key])) names.push(key);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> names.sort();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> class2type = &#123;&#125;;</span><br><span class="line"><span class="comment">// 生成class2type映射</span></span><br><span class="line"><span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span></span><br><span class="line">  .split(<span class="string">" "</span>)</span><br><span class="line">  .map(<span class="function"><span class="keyword">function</span>(<span class="params">item, index</span>) </span>&#123;</span><br><span class="line">    class2type[<span class="string">"[object "</span> + item + <span class="string">"]"</span>] = item.toLowerCase();</span><br><span class="line">  &#125;);</span><br><span class="line">_.type = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 一箭双雕</span></span><br><span class="line">  <span class="keyword">if</span> (obj == <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> obj + <span class="string">""</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">typeof</span> obj === <span class="string">"object"</span> || <span class="keyword">typeof</span> obj === <span class="string">"function"</span></span><br><span class="line">    ? class2type[<span class="built_in">Object</span>.prototype.toString.call(obj)] || <span class="string">"object"</span></span><br><span class="line">    : <span class="keyword">typeof</span> obj;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">_.isFunction = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _.type(obj) === <span class="string">"function"</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="mixin"><a href="#mixin" class="headerlink" title="mixin"></a>mixin</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ArrayProto = <span class="built_in">Array</span>.prototype;</span><br><span class="line"><span class="keyword">var</span> push = ArrayProto.push;</span><br><span class="line"></span><br><span class="line">_.each = <span class="function"><span class="keyword">function</span>(<span class="params">obj, callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> length,</span><br><span class="line">    i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isArrayLike(obj)) &#123;</span><br><span class="line">    length = obj.length;</span><br><span class="line">    <span class="keyword">for</span> (; i &lt; length; i++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (callback.call(obj[i], i, obj[i]) === <span class="literal">false</span>) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (i <span class="keyword">in</span> obj) &#123;</span><br><span class="line">      <span class="keyword">if</span> (callback.call(obj[i], i, obj[i]) === <span class="literal">false</span>) &#123;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">_.mixin = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  _.each(_.functions(obj), <span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> func = (_[name] = obj[name]);</span><br><span class="line">    <span class="comment">// 把 _ 对象上的函数挂载到 _.prototype上</span></span><br><span class="line">    _.prototype[name] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span> <span class="keyword">instanceof</span> _);</span><br><span class="line">      <span class="keyword">var</span> args = [<span class="keyword">this</span>._wrapped];</span><br><span class="line">      push.apply(args, <span class="built_in">arguments</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> func.apply(_, args);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> _;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>最终我们已经有了如下的工具函数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> root =</span><br><span class="line">    (<span class="keyword">typeof</span> self == <span class="string">"object"</span> &amp;&amp; self.self == self &amp;&amp; self) ||</span><br><span class="line">    (<span class="keyword">typeof</span> global == <span class="string">"object"</span> &amp;&amp; global.global == global &amp;&amp; global) ||</span><br><span class="line">    <span class="keyword">this</span> ||</span><br><span class="line">    &#123;&#125;;</span><br><span class="line">  <span class="keyword">var</span> _ = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!(<span class="keyword">this</span> <span class="keyword">instanceof</span> _)) <span class="keyword">return</span> <span class="keyword">new</span> _(obj);</span><br><span class="line">    <span class="keyword">this</span>._wrapped = obj;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  root._ = _;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 获得 _ 对象上的所有 function</span></span><br><span class="line">  _.functions = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> names = [];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">      <span class="keyword">if</span> (_.isFunction(obj[key])) names.push(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> names.sort();</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断数据类型</span></span><br><span class="line">  _.type = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> class2type = &#123;&#125;;</span><br><span class="line">    <span class="comment">// 生成class2type映射</span></span><br><span class="line">    <span class="string">"Boolean Number String Function Array Date RegExp Object Error"</span></span><br><span class="line">      .split(<span class="string">" "</span>)</span><br><span class="line">      .map(<span class="function"><span class="keyword">function</span>(<span class="params">item, index</span>) </span>&#123;</span><br><span class="line">        class2type[<span class="string">"[object "</span> + item + <span class="string">"]"</span>] = item.toLowerCase();</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 一箭双雕</span></span><br><span class="line">      <span class="keyword">if</span> (obj == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> obj + <span class="string">""</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">typeof</span> obj === <span class="string">"object"</span> || <span class="keyword">typeof</span> obj === <span class="string">"function"</span></span><br><span class="line">        ? class2type[<span class="built_in">Object</span>.prototype.toString.call(obj)] || <span class="string">"object"</span></span><br><span class="line">        : <span class="keyword">typeof</span> obj;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;)();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断是否是个函数</span></span><br><span class="line">  _.isFunction = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> _.type(obj) === <span class="string">"function"</span>;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断是否是个数组或类数组</span></span><br><span class="line">  _.isArrayLike = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// obj 必须有length属性</span></span><br><span class="line">    <span class="keyword">var</span> length = !!obj &amp;&amp; <span class="string">"length"</span> <span class="keyword">in</span> obj &amp;&amp; obj.length;</span><br><span class="line">    <span class="keyword">var</span> typeRes = _.type(obj);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//排除掉函数和window对象</span></span><br><span class="line">    <span class="keyword">if</span> (typeRes === <span class="string">"function"</span> || _.isWindow(obj)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      typeRes === <span class="string">"array"</span> ||</span><br><span class="line">      length === <span class="number">0</span> ||</span><br><span class="line">      (<span class="keyword">typeof</span> length === <span class="string">"number"</span> &amp;&amp; length &gt; <span class="number">0</span> &amp;&amp; length - <span class="number">1</span> <span class="keyword">in</span> obj)</span><br><span class="line">    );</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 判断是否是一个window对象</span></span><br><span class="line">  _.isWindow = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj === obj.window;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 遍历对象或数组</span></span><br><span class="line">  _.each = <span class="function"><span class="keyword">function</span>(<span class="params">obj, callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> length,</span><br><span class="line">      i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (_.isArrayLike(obj)) &#123;</span><br><span class="line">      length = obj.length;</span><br><span class="line">      <span class="keyword">for</span> (; i &lt; length; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (callback.call(obj[i], i, obj[i]) === <span class="literal">false</span>) &#123;</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">for</span> (i <span class="keyword">in</span> obj) &#123;</span><br><span class="line">        <span class="keyword">if</span> (callback.call(obj[i], i, obj[i]) === <span class="literal">false</span>) &#123;</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将 _ 对象上的 函数都 挂载到 _.prototype 上</span></span><br><span class="line">  _.mixin = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ArrayProto = <span class="built_in">Array</span>.prototype;</span><br><span class="line">    <span class="keyword">var</span> push = ArrayProto.push;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">      _.each(_.functions(obj), <span class="function"><span class="keyword">function</span>(<span class="params">index, name</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> func = (_[name] = obj[name]);</span><br><span class="line">        <span class="comment">// 把 _ 对象上的函数挂载到 _.prototype上</span></span><br><span class="line">        _.prototype[name] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">          <span class="keyword">var</span> args = [<span class="keyword">this</span>._wrapped];</span><br><span class="line">          push.apply(args, <span class="built_in">arguments</span>);</span><br><span class="line"></span><br><span class="line">          <span class="keyword">return</span> func.apply(_, args);</span><br><span class="line">        &#125;;</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> _;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;)();</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>至此，我们算是实现了同时支持面向对象和函数风格</p>
+<h4 id="导出"><a href="#导出" class="headerlink" title="导出"></a>导出</h4><p>终于到了最后一步 <code>root._ = _</code>，这里直接看源码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> exports != <span class="string">"undefined"</span> &amp;&amp; !exports.nodeType) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="built_in">module</span> != <span class="string">"undefined"</span> &amp;&amp; !<span class="built_in">module</span>.nodeType &amp;&amp; <span class="built_in">module</span>.exports) &#123;</span><br><span class="line">    exports = <span class="built_in">module</span>.exports = _;</span><br><span class="line">  &#125;</span><br><span class="line">  exports._ = _;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  root._ = _;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为了支持模块化，我们需要将 _ 在合适的环境中作为模块导出，但是 node.js 模块的 API 曾今发生过改变，比如在早期版本中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// add.js</span></span><br><span class="line">exports.addOne = <span class="function"><span class="keyword">function</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> num + <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">var</span> add = <span class="built_in">require</span>(<span class="string">"./add"</span>);</span><br><span class="line">add.addOne(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在新版本中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//add.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> num + <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">var</span> addOne = <span class="built_in">require</span>(<span class="string">"./add.js"</span>);</span><br><span class="line">addOne(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+
+<p>所以我们根据 exports 和 moudle 是否存在来选择不同的导出方式，那么为什么在新版本中，我们还要使用 <code>exports = module.exports = _</code> 呢？</p>
+<p>这是因为在 nodeJs 中，exports 是 module.exports 的一个引用，当你使用了 <code>module.exports = function(){},实际上覆盖了module.exports</code>，但是 exports 并未发生改变，为了避免后面在修改 exports 而导致不能正确输出，就写成这样，将两者保持统一。</p>
+<p>下面是个 demo</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// exports 是 module.exports的一个引用</span></span><br><span class="line"><span class="built_in">module</span>.exports.num = <span class="string">"1"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(exports.num); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line">exports.num = <span class="string">"2"</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">module</span>.exports.num); <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// addOne.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> num + <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">exports.num = <span class="string">"1"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// result.js 中引入 addOne.js</span></span><br><span class="line"><span class="keyword">var</span> addOne = <span class="built_in">require</span>(<span class="string">"./addOne.js"</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(addOne(<span class="number">1</span>)); <span class="comment">//2</span></span><br><span class="line"><span class="built_in">console</span>.log(addOne.num); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// addOne.js</span></span><br><span class="line">exports = <span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> num + <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">exports.num = <span class="string">"3"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// result.js 中引入 addOne.js</span></span><br><span class="line"><span class="keyword">var</span> addOne = <span class="built_in">require</span>(<span class="string">"./addOne.js"</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(addOne(<span class="number">1</span>)); <span class="comment">//2</span></span><br><span class="line"><span class="built_in">console</span>.log(addOne.num); <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+<p>最后为什么要进行一个 exports.nodeType 判断呢？ 这是因为如果你在 HTML 页面中加入一个 id 为 exports 的元素，比如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=<span class="string">"exports"</span> /&gt;</span><br></pre></td></tr></table></figure>
+
+<p>就会生成一个 window.exports 全局变量，你可以直接在浏览器命令中打印该变量，这个变量对应的就是这个 dom 元素</p>
+<p>此时在浏览器中， <code>typeof exports != &#39;undefined&#39;</code>的判断就会生效，然后<code>exports._ = _</code>，然后在浏览器中，我们需要将 _ 挂载到全局变量上，所以在这里，我们还需要进行一个是否是 DOM 节点的判断。</p>
+<h4 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h4><p>最终的代码如下，有了这个基本结构，你就可以自由添加需要用到的函数了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">var</span> root = (<span class="keyword">typeof</span> self === <span class="string">'object'</span> &amp;&amp; self.self === self &amp;&amp; self) ||</span><br><span class="line">                (<span class="keyword">typeof</span> global === <span class="string">'object'</span> &amp;&amp; global.global === global &amp;&amp; global) ||</span><br><span class="line">                <span class="keyword">this</span> ||</span><br><span class="line">                &#123;&#125;;</span><br><span class="line"></span><br><span class="line">     <span class="keyword">var</span> _ = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(obj <span class="keyword">instanceof</span> _) <span class="keyword">return</span> obj;</span><br><span class="line">       <span class="keyword">if</span>(!(<span class="keyword">this</span> <span class="keyword">instanceof</span> _)) <span class="keyword">return</span> <span class="keyword">new</span> _(obj);</span><br><span class="line">       <span class="keyword">this</span>._wrapped = obj;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">var</span> push = ArrayProto.push;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">var</span> ArrayProto = <span class="built_in">Array</span>.prototype;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(<span class="keyword">typeof</span> exports != <span class="string">'undefined'</span> &amp;&amp; !exports.nodeType) &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="built_in">module</span> != <span class="string">'undefined'</span> &amp;&amp; !<span class="built_in">module</span>.nodeType &amp;&amp; <span class="built_in">module</span>.exports) &#123;</span><br><span class="line">          exports = <span class="built_in">module</span>.exports = _;</span><br><span class="line">        &#125;</span><br><span class="line">        exports._ = _;</span><br><span class="line"></span><br><span class="line">      &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        root._ = _;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      _VERSION = <span class="string">'0.1'</span>l</span><br><span class="line"></span><br><span class="line">      <span class="keyword">var</span> MAX_ARRAY_INDEX = <span class="built_in">Math</span>.pow(<span class="number">2</span>, <span class="number">53</span>) - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">var</span> isArrayLike = <span class="function"><span class="keyword">function</span>(<span class="params">collection</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> length = collection.length;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">typeof</span> length == <span class="string">'number'</span> &amp;&amp; length &gt;= <span class="number">0</span> &amp;&amp; length &lt;= MAX_ARRAY_INDEX;</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">      _.each = <span class="function"><span class="keyword">function</span>(<span class="params">obj, callback</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> length , i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(isArrayLike(obj)) &#123;</span><br><span class="line">          length = obj.length;</span><br><span class="line">          <span class="keyword">for</span>(; i &lt; length; i ++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(callback.call(obj[i], i, obj[i]) === <span class="literal">false</span>) &#123;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">for</span>(i <span class="keyword">in</span> obj) &#123;</span><br><span class="line">            <span class="keyword">if</span>(callback.call(obj[i], i, obj[i]) === <span class="literal">false</span>) &#123;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">      &#125;</span><br><span class="line">     </span><br><span class="line">      _.isFunction = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">typeof</span> obj == <span class="string">'function'</span> || <span class="literal">false</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    </span><br><span class="line">      _.function = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> name = [];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">          <span class="keyword">if</span>(_.isFunction(obj[key])) names.push(key);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> names.sort();</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 在 _.mixin(_) 前添加自己定义的方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    _.reverse = <span class="function"><span class="keyword">function</span>(<span class="params">string</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> string.split(<span class="string">''</span>).reverse().join(<span class="string">''</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    _.mixin = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">      _.each(_.function(obj), <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> func = _[name] = obj[name];</span><br><span class="line">        _.prototype[name] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">          <span class="keyword">var</span> args = [<span class="keyword">this</span>._wrapped];</span><br><span class="line"></span><br><span class="line">          push.apply(args, <span class="built_in">arguments</span>);</span><br><span class="line">          <span class="keyword">return</span> func.apply(_, args);</span><br><span class="line"></span><br><span class="line">        &#125;;</span><br><span class="line">      &#125;);</span><br><span class="line">      <span class="keyword">return</span> _;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    _.mixin(_);</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+      
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/underscore/" rel="tag"># underscore</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/08/javaScript之递归/" rel="next" title="javaScript之递归">
+                <i class="fa fa-chevron-left"></i> javaScript之递归
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  
+    <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="blue">
+  
+  <p class="site-author-name" itemprop="name">blue</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+
+
+  <nav class="site-state motion-element">
+    
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+
+    
+
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+          
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#自己的实现"><span class="nav-number">1.</span> <span class="nav-text">自己的实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#root"><span class="nav-number">2.</span> <span class="nav-text">root</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Web-Worker"><span class="nav-number">3.</span> <span class="nav-text">Web Worker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#node-vm"><span class="nav-number">4.</span> <span class="nav-text">node vm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#微信小程序"><span class="nav-number">5.</span> <span class="nav-text">微信小程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#函数对象"><span class="nav-number">6.</span> <span class="nav-text">函数对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#functions"><span class="nav-number">7.</span> <span class="nav-text">_.functions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mixin"><span class="nav-number">8.</span> <span class="nav-text">mixin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#导出"><span class="nav-number">9.</span> <span class="nav-text">导出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码"><span class="nav-number">10.</span> <span class="nav-text">源码</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-fas fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">blue</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  
+
+  
+
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// GET RESPONSIVE HEIGHT PASSED FROM IFRAME
+
+window.addEventListener("message", function(e) {
+  var data = e.data;
+  if ((typeof data === 'string') && (data.indexOf('ciu_embed') > -1)) {
+    var featureID = data.split(':')[1];
+    var height = data.split(':')[2];
+    $(`iframe[data-feature=${featureID}]`).height(parseInt(height) + 30);
+  }
+}, false);
+</script>
+
+
+
+
+
+
+
+
+  
+
+</body>
+</html>
