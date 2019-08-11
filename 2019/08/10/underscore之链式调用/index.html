@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: ''
+    },
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="原文来自冴羽 jQuery说到链式调用，相信用过jQuery的人都不会对这个词陌生 1$(&apos;div&apos;).eq(0).css(&apos;width&apos;, &quot;200px&quot;).show();  这里写一个简单的demo来模拟链式调用 123456789101112131415161718192021222324252627282930313233function jQuery(selector) &amp;#123;">
+<meta name="keywords" content="underscore">
+<meta property="og:type" content="article">
+<meta property="og:title" content="underscore之链式调用">
+<meta property="og:url" content="http://yoursite.com/2019/08/10/underscore之链式调用/index.html">
+<meta property="og:site_name" content="blue的个人博客">
+<meta property="og:description" content="原文来自冴羽 jQuery说到链式调用，相信用过jQuery的人都不会对这个词陌生 1$(&apos;div&apos;).eq(0).css(&apos;width&apos;, &quot;200px&quot;).show();  这里写一个简单的demo来模拟链式调用 123456789101112131415161718192021222324252627282930313233function jQuery(selector) &amp;#123;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-10T15:18:47.916Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="underscore之链式调用">
+<meta name="twitter:description" content="原文来自冴羽 jQuery说到链式调用，相信用过jQuery的人都不会对这个词陌生 1$(&apos;div&apos;).eq(0).css(&apos;width&apos;, &quot;200px&quot;).show();  这里写一个简单的demo来模拟链式调用 123456789101112131415161718192021222324252627282930313233function jQuery(selector) &amp;#123;">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/08/10/underscore之链式调用/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  
+  <title>underscore之链式调用 | blue的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">blue的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">每天学习进步，贵在坚持</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/10/underscore之链式调用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="blue">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blue的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">underscore之链式调用
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-10 20:17:12 / 修改时间：23:18:47" itemprop="dateCreated datePublished" datetime="2019-08-10T20:17:12+08:00">2019-08-10</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://github.com/mqyqingfeng/Blog/issues/57" target="_blank" rel="noopener">原文来自冴羽</a></p>
+<h4 id="jQuery"><a href="#jQuery" class="headerlink" title="jQuery"></a>jQuery</h4><p>说到链式调用，相信用过jQuery的人都不会对这个词陌生</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">'div'</span>).eq(<span class="number">0</span>).css(<span class="string">'width'</span>, <span class="string">"200px"</span>).show();</span><br></pre></td></tr></table></figure>
+
+<p>这里写一个简单的demo来模拟链式调用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">jQuery</span>(<span class="params">selector</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.elements = [];</span><br><span class="line">    <span class="keyword">var</span> nodeLists = documents.getElementsByTagName(selector);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; nodeLists.length; i++) &#123;</span><br><span class="line">        <span class="keyword">this</span>.elements.push(nodeLists[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">jQuery.prototype = &#123;</span><br><span class="line">    eq : <span class="function"><span class="keyword">function</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.elements = [<span class="keyword">this</span>.elements[num]];</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    css: <span class="function"><span class="keyword">function</span>(<span class="params">prop, val</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.elements.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">el</span>) </span>&#123;</span><br><span class="line">            el.style[prop] = val;</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    show: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.css(<span class="string">'display'</span>, <span class="string">'black'</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">window</span>.$ = <span class="function"><span class="keyword">function</span>(<span class="params">selector</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> jQuery(selector)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$(<span class="string">'div'</span>).eq(<span class="number">0</span>).css(<span class="string">'width'</span>, <span class="string">'200px'</span>).show();</span><br></pre></td></tr></table></figure>
+
+<p>jQuery 之所以能实现链式调用，关键就在于通过 <code>return this</code>，返回调用对象，在精简下demo就是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> jQuery = &#123;</span><br><span class="line">    eq: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'调用 eq 方法'</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">    show: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'调用show方法'</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">jQuery.eq().show();</span><br></pre></td></tr></table></figure>
+
+<h4 id="chain"><a href="#chain" class="headerlink" title="_.chain"></a>_.chain</h4><p>在underscore中，默认不适用链式调用，但是如果你想使用链式调用，可以通过 _.chain 函数实现:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_.chain([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line"> .filter(<span class="function"><span class="keyword">function</span>(<span class="params">num</span>)</span>&#123;</span><br><span class="line">     <span class="keyword">return</span> num % <span class="number">2</span> == ;</span><br><span class="line"> &#125;)</span><br><span class="line"> .map(<span class="function"><span class="keyword">function</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> num * num;</span><br><span class="line"> &#125;)</span><br><span class="line"> .value(); <span class="comment">// [4, 16]</span></span><br></pre></td></tr></table></figure>
+
+<p>我们来看看 _.chain 这个方法都做了什么：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_.chain = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> instance = _(obj);</span><br><span class="line">    instance._chain_ = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们以 [1, 2, 3]为例， _.chain([1, 2, 3])会返回一个对象</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    _chain: <span class="literal">true</span>,</span><br><span class="line">    _wrapped: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该对象的原型上有着underscore的各种方法，我们可以直接调用这些方法。<br>但是这些方法并没有像jQuery一样，返回this，所以如果你调用了一次方法，就无法接着调用其他方法了<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">但是，如果我们将函数的返回值作为参数再传入  `_.chain`函数中，不久可以接着调用其他方法了？</span><br><span class="line"></span><br><span class="line">一个更加精简的demo</span><br><span class="line">```js</span><br><span class="line">var _ = function(obj) &#123;</span><br><span class="line">    if(!(this instanceof _)) return new _(obj);</span><br><span class="line">    this._wrapped = obj;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">_.chain = function(obj) &#123;</span><br><span class="line">    var instance = _(obj);</span><br><span class="line">    instance._chain = true;</span><br><span class="line">    return instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.prototype.push = function(num) &#123;</span><br><span class="line">    this._wrapped.push(num);</span><br><span class="line">    return this._wrapped;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.prototype.shift = function(num) &#123;</span><br><span class="line">    this._wrapped.shift()</span><br><span class="line">    return this._wrapped;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var res = _.chain([1, 2, 3]).push(4);</span><br><span class="line">// 将上一个函数的返回值，传入 _.chain， 然后再继续调用其他函数</span><br><span class="line">var res2 = _.chain(res).shift();</span><br><span class="line"></span><br><span class="line">console.log(res2); //[ 2, 3, 4]</span><br></pre></td></tr></table></figure></p>
+<p>这样的效果并不是我们所期望的，我们希望写法是这样的</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_.chain([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]).push(<span class="number">4</span>).shift();</span><br></pre></td></tr></table></figure>
+
+<p>所以我们再优化一下实现方式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">var</span> _ = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">     <span class="keyword">if</span>(!(<span class="keyword">this</span> <span class="keyword">instanceof</span> _)) <span class="keyword">return</span> <span class="keyword">new</span> _(obj);</span><br><span class="line">     <span class="keyword">this</span>._wrapped = obj;</span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">var</span> chainResult = <span class="function"><span class="keyword">function</span>(<span class="params">instance, obj</span>) </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> instance._chain ? _.chain(obj) : obj;</span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line">_.chain = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> instance = _(obj);</span><br><span class="line">    instance._chain = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">_.prototype.push = <span class="function"><span class="keyword">function</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>._wrapped.push(num);</span><br><span class="line">    <span class="keyword">return</span> chainResult(<span class="keyword">this</span>, <span class="keyword">this</span>._wrapped);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.prototype.shift = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>._wrapped.shift();</span><br><span class="line">    <span class="keyword">return</span> chainResult(<span class="keyword">this</span>, <span class="keyword">this</span>._wrapped);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> res = _.chain([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]).push(<span class="number">4</span>).shift();</span><br><span class="line"><span class="built_in">console</span>.log(res._wrapped);</span><br></pre></td></tr></table></figure>
+
+<p>这里在每个函数中，都用 chainResult将函数的返回值包裹一遍，再生成一个类似以下这种形式的对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    _wrapped: some value,</span><br><span class="line">    _chain: <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该对象原型上有各种函数，而这些函数的返回值作为参数传入了chainResult，该函数又会返回这样一个对象，函数的返回值就保存在 _wrapped 中，这样实现了链式调用。</p>
+<p>_.chain 链式调用原理就是这样，可以这样的话，我们需要对每一个函数都进行修改。。。</p>
+<p>幸运的是，在underscore中，所有的函数是挂载到 _ 函数对象中的， _.prototype上的函数是通过 _.mixin 函数将 _ 函数对象中的所有函数复制到 _.prototype 中的。</p>
+<p>为了实现链式调用，我们需要对 _.mixin 方法进行一定修改:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 修改前</span></span><br><span class="line"><span class="keyword">var</span> ArrayProto = <span class="built_in">Array</span>.prototype;</span><br><span class="line"><span class="keyword">var</span> push = ArrayProto.push;</span><br><span class="line"></span><br><span class="line">_.mixin = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    _.each(_.function(obj), <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> func = _[name] = obj[name];</span><br><span class="line">        _.prototype[name] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">var</span> args = [<span class="keyword">this</span>._wrapped];</span><br><span class="line">            push.apply(args, <span class="built_in">arguments</span>);</span><br><span class="line">            <span class="keyword">return</span> func.apply(_, args);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> _;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.mixin(_)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 修改后</span></span><br><span class="line"><span class="keyword">var</span> ArrayProto = <span class="built_in">Array</span>.prototype;</span><br><span class="line"><span class="keyword">var</span> push = ArrayProto.push;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> chainResult = <span class="function"><span class="keyword">function</span>(<span class="params">instance, obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> instance._chain ? _(obj).chain() : obj;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> _.mixin = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    _.each(_.function(obj), <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> func = _[name] = obj[name];</span><br><span class="line">        _.prototype[name] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> args = [<span class="keyword">this</span>.wrapped];</span><br><span class="line">            push.apply(args, <span class="built_in">arguments</span>);</span><br><span class="line">            <span class="keyword">return</span> chainResult(<span class="keyword">this</span>, func.apply(_, args));</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> _;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_mixin(_);</span><br></pre></td></tr></table></figure>
+
+<h4 id="value"><a href="#value" class="headerlink" title="_.value"></a>_.value</h4><p>根据上面的分析过程，我们知道如果我们打印：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(_.chain([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]).push(<span class="number">4</span>).shift());</span><br></pre></td></tr></table></figure>
+
+<p>其实会打印一个对象</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    _wrapped : [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">    _chain : <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以，我们还需要提供一个value方法，当执行value方法的时候，就返回当前 _wrapped 的值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">_.prototype.value = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._wrapped;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时调用的方式为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = _.chain([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]).push(<span class="number">4</span>).shift().value();</span><br><span class="line"><span class="built_in">console</span>.log(arr)</span><br></pre></td></tr></table></figure>
+
+<h4 id="最终代码"><a href="#最终代码" class="headerlink" title="最终代码"></a>最终代码</h4><pre><code class="js">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+    <span class="keyword">var</span> root = (<span class="keyword">typeof</span> self === <span class="string">'object'</span> &amp;&amp; self.self == self &amp;&amp; self) ||
+               (<span class="keyword">typeof</span> global === <span class="string">'object'</span> &amp;&amp; global.global == global &amp;&amp; global) ||
+               <span class="keyword">this</span> ||
+              {};
+    <span class="keyword">var</span> _ = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>{
+        <span class="keyword">if</span>(obj <span class="keyword">instanceof</span> _) <span class="keyword">return</span> obj;
+        <span class="keyword">if</span>(!(<span class="keyword">this</span> <span class="keyword">instanceof</span> _)) <span class="keyword">return</span> <span class="keyword">new</span> _(obj);
+        <span class="keyword">this</span>._wrapped = obj;
+    }
+
+    <span class="keyword">var</span> ArrayProto = <span class="built_in">Array</span>.prototype;
+    <span class="keyword">var</span> push  = ArrayProto.push;
+
+    <span class="keyword">if</span>(<span class="keyword">typeof</span> exports != <span class="string">'undefined'</span> &amp;&amp; !exports.nodeType) {
+        <span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="built_in">module</span> != <span class="string">'undefined'</span> &amp;&amp; !<span class="built_in">module</span>.nodeType) {
+            exports = <span class="built_in">module</span>.exports = _;
+        }
+        exports._ = _;
+    } <span class="keyword">else</span> {
+        root._ = _;
+    }
+
+   _.VERSION = <span class="string">'0.2'</span>;
+
+   <span class="keyword">var</span> MAX_ARRAY_INDEX = <span class="built_in">Math</span>.pow(<span class="number">2</span>, <span class="number">53</span>) - <span class="number">1</span>;
+
+   <span class="keyword">var</span> isArrayLike = <span class="function"><span class="keyword">function</span>(<span class="params">collection</span>) </span>{
+       <span class="keyword">var</span> length = collection.length;
+       <span class="keyword">return</span> <span class="keyword">typeof</span> length == <span class="string">'number'</span> &amp;&amp; length &gt;= <span class="number">0</span> &amp;&amp; length &lt;= MAX_ARRAY_INDEX;
+   }
+
+   _.each = <span class="function"><span class="keyword">function</span>(<span class="params">obj, callback</span>) </span>{
+       <span class="keyword">var</span> length, i = <span class="number">0</span>;
+       <span class="keyword">if</span>(isArrayLike(obj)) {
+           length = obj.length;
+           <span class="keyword">for</span>(; i &lt; length; i++){
+               <span class="keyword">if</span>(callback.call(obj[i], i , obj[i]) === <span class="literal">false</span>) <span class="keyword">break</span>;
+           }
+       }<span class="keyword">else</span> {
+           <span class="keyword">for</span>(i <span class="keyword">in</span> obj){
+               <span class="keyword">if</span>(callback.call(obj[i], i, obj[i]) === <span class="literal">false</span>) <span class="keyword">break</span>;
+           }
+       }
+       <span class="keyword">return</span> obj;
+   }
+
+    _.isFunction  <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>{
+        <span class="keyword">return</span> <span class="keyword">typeof</span> obj == <span class="string">'function'</span> || <span class="literal">false</span>;
+    }
+
+   _.function  = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>{
+       <span class="keyword">var</span> names = [];
+       <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> obj) {
+           <span class="keyword">if</span>(_.isFunction(obj[key])) names.push(key);
+       }
+       <span class="keyword">return</span> names.sort();
+   };
+   <span class="comment">/**</span>
+<span class="comment">    * 在 _.mixin(_) 前添加自己定义的方法</span>
+<span class="comment">    */</span>
+   _.reverse = <span class="function"><span class="keyword">function</span>(<span class="params">string</span>) </span>{
+       <span class="keyword">return</span> string.(<span class="string">''</span>).reverse().join(<span class="string">''</span>);
+   };
+
+   _.chain = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>{
+       <span class="keyword">var</span> instance = _(obj);
+       instance._chain = <span class="literal">true</span>;
+       <span class="keyword">return</span> instance;
+   }
+
+   <span class="keyword">var</span> chainResult = <span class="function"><span class="keyword">function</span>(<span class="params">instance, obj</span>) </span>{
+       <span class="keyword">return</span> instance._chain ? _(obj) : obj;
+   }
+
+   _.maxin = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>{
+       _.each(_.function(obj), <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>{
+           <span class="keyword">var</span> func = _[name] = obj[name];
+           _.prototype[name] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+               <span class="keyword">var</span> args = [<span class="keyword">this</span>._wrapped];
+               push.apply(args, <span class="built_in">arguments</span>);
+               <span class="keyword">return</span> chainResult(<span class="keyword">this</span>, func.apply(_, args));
+           }
+       })
+       <span class="keyword">return</span> _;
+   }
+   _.mixin(_);
+
+   _.prototype.value = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>{
+       <span class="keyword">return</span> <span class="keyword">this</span>._wrapped;
+   }
+
+})()</code></pre>
+
+      
+    </div>
+
+    
+
+    
+      
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/underscore/" rel="tag"># underscore</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/10/underscore之编写自己的underscore/" rel="next" title="underscore之编写自己的underscore">
+                <i class="fa fa-chevron-left"></i> underscore之编写自己的underscore
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/10/underscore之内部函数cb和optimizeCb/" rel="prev" title="underscore之内部函数cb和optimizeCb">
+                underscore之内部函数cb和optimizeCb <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  
+    <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="blue">
+  
+  <p class="site-author-name" itemprop="name">blue</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+
+
+  <nav class="site-state motion-element">
+    
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+
+    
+
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+          
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#jQuery"><span class="nav-number">1.</span> <span class="nav-text">jQuery</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#chain"><span class="nav-number">2.</span> <span class="nav-text">_.chain</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#value"><span class="nav-number">3.</span> <span class="nav-text">_.value</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最终代码"><span class="nav-number">4.</span> <span class="nav-text">最终代码</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-fas fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">blue</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  
+
+  
+
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// GET RESPONSIVE HEIGHT PASSED FROM IFRAME
+
+window.addEventListener("message", function(e) {
+  var data = e.data;
+  if ((typeof data === 'string') && (data.indexOf('ciu_embed') > -1)) {
+    var featureID = data.split(':')[1];
+    var height = data.split(':')[2];
+    $(`iframe[data-feature=${featureID}]`).height(parseInt(height) + 30);
+  }
+}, false);
+</script>
+
+
+
+
+
+
+
+
+  
+
+</body>
+</html>
