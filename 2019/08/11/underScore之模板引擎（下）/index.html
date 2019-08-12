@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: ''
+    },
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="转义序列在javaScript中，字符串值是一个由零或多个 Unicode字符（字母、数字和其他字符）组成的序列。字符串的每个字符均可由一个转义序列表示。比如字母 a , 也可以用转义序列 \u0061表示。  转义序列以反斜杠 \ 开头,它的作用是告知 javaScript解释器下一个字符是特殊字符   转义序列的语法为 \uhhhh,其中 hhhh 是四位十六进制数。根据这个规则，我们可以算出">
+<meta name="keywords" content="underscore">
+<meta property="og:type" content="article">
+<meta property="og:title" content="underScore之模板引擎（下）">
+<meta property="og:url" content="http://yoursite.com/2019/08/11/underScore之模板引擎（下）/index.html">
+<meta property="og:site_name" content="blue的个人博客">
+<meta property="og:description" content="转义序列在javaScript中，字符串值是一个由零或多个 Unicode字符（字母、数字和其他字符）组成的序列。字符串的每个字符均可由一个转义序列表示。比如字母 a , 也可以用转义序列 \u0061表示。  转义序列以反斜杠 \ 开头,它的作用是告知 javaScript解释器下一个字符是特殊字符   转义序列的语法为 \uhhhh,其中 hhhh 是四位十六进制数。根据这个规则，我们可以算出">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-12T15:42:10.225Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="underScore之模板引擎（下）">
+<meta name="twitter:description" content="转义序列在javaScript中，字符串值是一个由零或多个 Unicode字符（字母、数字和其他字符）组成的序列。字符串的每个字符均可由一个转义序列表示。比如字母 a , 也可以用转义序列 \u0061表示。  转义序列以反斜杠 \ 开头,它的作用是告知 javaScript解释器下一个字符是特殊字符   转义序列的语法为 \uhhhh,其中 hhhh 是四位十六进制数。根据这个规则，我们可以算出">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/08/11/underScore之模板引擎（下）/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  
+  <title>underScore之模板引擎（下） | blue的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">blue的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">每天学习进步，贵在坚持</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/11/underScore之模板引擎（下）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="blue">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blue的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">underScore之模板引擎（下）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-11 20:25:45" itemprop="dateCreated datePublished" datetime="2019-08-11T20:25:45+08:00">2019-08-11</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-12 23:42:10" itemprop="dateModified" datetime="2019-08-12T23:42:10+08:00">2019-08-12</time>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="转义序列"><a href="#转义序列" class="headerlink" title="转义序列"></a>转义序列</h4><p>在javaScript中，字符串值是一个由零或多个 Unicode字符（字母、数字和其他字符）组成的序列。<br>字符串的每个字符均可由一个转义序列表示。比如字母 a , 也可以用转义序列 <code>\u0061</code>表示。</p>
+<blockquote>
+<p>转义序列以反斜杠 <code>\</code> 开头,它的作用是告知 javaScript解释器下一个字符是特殊字符</p>
+</blockquote>
+<blockquote>
+<p>转义序列的语法为 <code>\uhhhh</code>,其中 hhhh 是四位十六进制数。<br>根据这个规则，我们可以算出常见字符的转义序列，以字母 m 为例:</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 求出字符 m 对应的 unicode值</span></span><br><span class="line"><span class="keyword">var</span> unicode = <span class="string">'m'</span>.charCodeAt(<span class="number">0</span>) <span class="comment">// 109</span></span><br><span class="line"><span class="comment">// 2. 转成十六禁止</span></span><br><span class="line"><span class="keyword">var</span> result = unicode.toString(<span class="number">16</span>)l <span class="comment">//"6d"</span></span><br></pre></td></tr></table></figure>
+
+<p>这里是一些常用字符的转义序列以及含义：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Unicode 字符值</th>
+<th align="center">转义序列</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">\u0009</td>
+<td align="center">\t</td>
+<td align="center">制表符</td>
+</tr>
+<tr>
+<td align="center">\u000A</td>
+<td align="center">\n</td>
+<td align="center">换行</td>
+</tr>
+<tr>
+<td align="center">\u000D</td>
+<td align="center">\r</td>
+<td align="center">回车</td>
+</tr>
+<tr>
+<td align="center">\u0022</td>
+<td align="center">&quot;</td>
+<td align="center">双引号</td>
+</tr>
+<tr>
+<td align="center">\u0027</td>
+<td align="center">&#39;</td>
+<td align="center">单引号</td>
+</tr>
+<tr>
+<td align="center">\u005C</td>
+<td align="center">\</td>
+<td align="center">反斜杠</td>
+</tr>
+<tr>
+<td align="center">\u2028</td>
+<td align="center"></td>
+<td align="center">行分隔符</td>
+</tr>
+<tr>
+<td align="center">\u2029</td>
+<td align="center"></td>
+<td align="center">段落分隔符</td>
+</tr>
+</tbody></table>
+<h4 id="Line-Terminators"><a href="#Line-Terminators" class="headerlink" title="Line Terminators"></a>Line Terminators</h4><p>Line Terminators, 中文译文 <code>行终结符</code>。像空白符一样， <code>行终结符</code>可用于改善源文本的可读性。<br>在es5中，由四个字符被认为是 <code>行终结符</code>,其他的折行字符都会被视为空白。<br>|字符编码值|名称|<br>|:——:|:——:|<br>| \u000A | 换行符  |<br>| \u000D | 回车符   |<br>| \u2028 | 行分隔符 |<br>| \u2029 | 段落分隔符 |</p>
+<h4 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h4><p>试想我们写这样一段代码，能否正确运行：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> log = <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">"var a = '1\t23';console.log(a)"</span>);</span><br><span class="line">log()</span><br></pre></td></tr></table></figure>
+
+<p>答案是可以，那下面这段呢：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> log = <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">"var a = '1\n23';console.log(a)"</span>);</span><br><span class="line">log()</span><br></pre></td></tr></table></figure>
+
+<p>答案是不可以，会报错 <code>VM42263:3 Uncaught SyntaxError: Invalid or unexpected token</code></p>
+<p>这是为什么呢？<br>这是因为Function 构造函数的实现中，首先会将函数体代码字符串进行一次 ToString 操作，这时候字符串变成了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">'1</span></span><br><span class="line"><span class="string"> 23'</span>; <span class="built_in">console</span>.log(a)</span><br><span class="line"><span class="string">'</span></span><br></pre></td></tr></table></figure>
+
+<p>然后再检测代码字符串是否符合代码规范，在javaScript中，字符串表达式中是不允许换行的，这就导致了报错。</p>
+<p>为了避免报错，我们需要将代码修改为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> log = <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">"var a = '1\\n23', console.log(a)"</span>)</span><br><span class="line">log()</span><br></pre></td></tr></table></figure>
+
+<p>不止 \n ，其他三种 <code>行终结符</code>，如果你在字符串表达式中直接使用，都会导致报错！<br>之所以讲这个问题，是因为在模板引擎的实现中，就是使用了 Function 构造函数，如果我们在模板字符串中使用了 <code>行终结符</code>,便有可能会出现一样的错误，所以我们必须要对这四种 <code>行终结符</code>进行特殊的处理。</p>
+<h4 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h4><p>除了这四种<code>行终结符</code>之外，我们还要对两个字符串进行处理<br>一个是  <code>\</code><br>比如我们在模板内容中使用了 <code>\</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> log = <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">"var a = '1\23';console.log(a)"</span>);</span><br><span class="line">log(); <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<p>其实我们是想打印 ‘1\23’，但是因为把 \ 当成了特殊字符的标记进行处理，所以最终打印了 1。</p>
+<p>同样的道理，如果我们在使用模板引擎的时候，使用了 \ 字符串，也会导致错误的处理。</p>
+<p>所以总共我们需要对六种字符进行特殊处理，处理的方式，就是正则匹配出这些特殊字符，然后比如将 \n 替换成 \n，\ 替换成 \，’ 替换成 \‘，处理的代码为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> escapes = &#123;</span><br><span class="line">    <span class="string">"'"</span> : <span class="string">"'"</span>,</span><br><span class="line">    <span class="string">"\\"</span> : <span class="string">"\\"</span>,</span><br><span class="line">    <span class="string">"\r"</span> : <span class="string">"r"</span>,</span><br><span class="line">    <span class="string">"\n"</span> <span class="string">" "</span>n<span class="string">",</span></span><br><span class="line"><span class="string">    // 行分隔符</span></span><br><span class="line"><span class="string">    "</span>\u2028<span class="string">" : "</span>u2028<span class="string">",</span></span><br><span class="line"><span class="string">    // 段落分隔符</span></span><br><span class="line"><span class="string">    "</span>\u2029<span class="string">" : "</span>u2029<span class="string">"</span></span><br><span class="line"><span class="string">&#125;;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">var escapeRegExp = /\\|'|\r|\n|\u2028|\u2029/g;</span></span><br><span class="line"><span class="string">var escapeChar   = function(match) &#123;</span></span><br><span class="line"><span class="string">    return '\\' + escapes[match];</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们测试一下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'console.log("I am \n blue");'</span>;</span><br><span class="line"><span class="keyword">var</span> newStr = str.replace(escapeRegExp, escapeChar);</span><br><span class="line"></span><br><span class="line"><span class="built_in">eval</span>(newStr)</span><br><span class="line"><span class="comment">// I am </span></span><br><span class="line"><span class="comment">// blue</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h4><p>这里我们来讲讲 replace函数：<br>语法：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str.replace(regextp|substr, newSubStr|<span class="function"><span class="keyword">function</span>)</span></span><br></pre></td></tr></table></figure>
+
+<p>replace 的第一个参数，可以传一个字符串，也可以传一个正则表达式。<br>第二个参数，可以传一个新字符串，也可以传一个函数。</p>
+<p>这里重点看传入一个函数的情况</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'hello world'</span>;</span><br><span class="line"><span class="keyword">var</span> newStr = str.replace(<span class="string">'world'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">match</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> match + <span class="string">'!'</span>;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(newStr) <span class="comment">// hello world!</span></span><br></pre></td></tr></table></figure>
+
+<p>match 表示匹配到的字符串，但函数的参数其实不止有match，下面是个更复杂的例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">replacer</span>(<span class="params">match, p1, p2, p3, offset, string</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// match, 表示匹配到的子串， abc12345#$*%</span></span><br><span class="line">    <span class="comment">// p1   , 第一个括号匹配的字符串  abc</span></span><br><span class="line">    <span class="comment">// p3   , 第二个括号匹配的字符串  12345</span></span><br><span class="line">    <span class="comment">// offset , 匹配到的子字符串在原字符串中的偏移量 0</span></span><br><span class="line">    <span class="comment">// string , 被匹配的原字符串 abc12345#$*%</span></span><br><span class="line">    <span class="keyword">return</span> [p1, p2, p3].join(<span class="string">' - '</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> newString = <span class="string">'abc12345#$*%'</span>.replace(<span class="regexp">/([^\d]*)(\d*)([^\w]*)/</span>, replacer); <span class="comment">// abc - 12345 - #$*%</span></span><br></pre></td></tr></table></figure>
+
+<p>另外要注意的是，如果第一个参数是正则表达式，并且其为全局匹配模式，那么这个方法将被多次调用，每次匹配都会被调用</p>
+<p>举个例子</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'&lt;li&gt;&lt;a href="&lt;%=www.baidu.com%&gt;"&gt;&lt;%=baidu%&gt;&lt;/a&gt;&lt;/li&gt;'</span></span><br><span class="line"></span><br><span class="line">    str.replace(<span class="regexp">/&lt;%=(.+?)%&gt;/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">match, p1, offset, string</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(match);</span><br><span class="line">        <span class="built_in">console</span>.log(p1);</span><br><span class="line">        <span class="built_in">console</span>.log(offset);</span><br><span class="line">        <span class="built_in">console</span>.log(string);</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>传入的函数会被执行两次，第一次的打印结果为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;%= www.baidu.com %&gt;</span><br><span class="line">www.baidu.com</span><br><span class="line"><span class="number">13</span></span><br><span class="line">&lt;li&gt;<span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"&lt;%=www.baidu.com%&gt;"</span>&gt;</span><span class="tag">&lt;<span class="name">%=baidu%</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>第二次打印结果为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;%=baidu%&gt;</span><br><span class="line"><span class="string">'baidu'</span></span><br><span class="line"><span class="number">33</span></span><br><span class="line">&lt;li&gt;<span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"&lt;%=www.baidu.com%&gt;"</span>&gt;</span><span class="tag">&lt;<span class="name">%=baidu%</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><span class="xml"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h4 id="正则表达式的创建"><a href="#正则表达式的创建" class="headerlink" title="正则表达式的创建"></a>正则表达式的创建</h4><p>当我们要建立一个正则表达式的时候，我们可以直接创建：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/ab+c/i</span>;</span><br></pre></td></tr></table></figure>
+
+<p>也可以使用构造函数的方式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'ab+c'</span>, <span class="string">'i'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>值得一提的是：每个正则表达式对象都有一个source属性，返回当前正则表达式对象的模式文本的字符串：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> regex = <span class="regexp">/fooBar/ig</span></span><br><span class="line"><span class="comment">// source 属性用于返回模式匹配所用的文本。</span></span><br><span class="line"><span class="built_in">console</span>.log(regex.source);  <span class="comment">// fooBar</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> regex.source) <span class="comment">// string</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="正则表达式的特殊字符"><a href="#正则表达式的特殊字符" class="headerlink" title="正则表达式的特殊字符"></a>正则表达式的特殊字符</h4><p>在underscore的实现中，匹配 <code>&lt;%=xxx%&gt;</code>使用的是<code>/&lt;%=([\s\S]+?)%&gt;/g</code>, \s 表示匹配一个空白符，包括空格，制表符，换页符，换行符，和其他 Unicode空格，\S匹配一个非空白符，[\s\S]就表示匹配所有的内容，可是为什么我们不直接使用 . 呢？</p>
+<p>我们可能以为 . 匹配任意单个字符，实际上，并不是如此，<code>.</code>匹配除 <code>行终结符</code>之外的任何单个字符</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'&lt;%=hello world%&gt;'</span></span><br><span class="line">str.replace(<span class="regexp">/&lt;%=(.+?)%&gt;/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">match</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(match) <span class="comment">// &lt;%=hello world%&gt;</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>但是如果我们在 hello world 之间加上一个<code>行终结符</code>,比如说<code>\u2029</code>:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'&lt;%=hello \u2029 world%&gt;'</span></span><br><span class="line">    str.replace(<span class="regexp">/&lt;%=(.+?)%&gt;/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">match</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(match)</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>因为匹配不到，所以不会执行console.log函数</p>
+<p>但是改成<code>/&lt;%=([\s\S]+?)%&gt;/g</code>就可以正常匹配：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'&lt;%=hello \u2029 world%&gt;'</span></span><br><span class="line"></span><br><span class="line">    str.replace(<span class="regexp">/&lt;%=([\s\S]+?)%&gt;/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">match</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(match) <span class="comment">//&lt;%=hello \u2029 world%&gt;</span></span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="惰性匹配"><a href="#惰性匹配" class="headerlink" title="惰性匹配"></a>惰性匹配</h4><p>仔细看 <code>/&lt;%=([\s\S]+?)%&gt;/g</code> 这个正则表达式，我们知道 x+ 表示匹配 x 1次或多次，x?表示匹配 x 0次或1次，但是 +? 是什么鬼？</p>
+<p>实际上，如果在数量词 *、+、? 或者 {} 任意一个后面紧跟该符号 <code>?</code>，会使数量词变为非贪婪(non-greedy)|惰性，即匹配次数最小化。反之，默认情况下，是贪婪的(greedy)|非惰性,即匹配次数最大化。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//非惰性</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"aaabc"</span>.replace(<span class="regexp">/a+/g</span>, <span class="string">"d"</span>)); <span class="comment">// dbc</span></span><br><span class="line"><span class="comment">// 惰性</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"aaabc"</span>.replace(<span class="regexp">/a+?/g</span>, <span class="string">"d"</span>)   <span class="comment">// dddbc</span></span><br></pre></td></tr></table></figure>
+
+<p>在这里我们使用惰性匹配</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'&lt;li&gt;&lt;a href="&lt;%=www.baidu.com%&gt;"&gt;&lt;%=baidu%&gt;&lt;/a&gt;&lt;/li&gt;'</span></span><br><span class="line"></span><br><span class="line">str.replace(<span class="regexp">/&lt;%=(.+?)%&gt;/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">match</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(match);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// &lt;%=www.baidu.com%&gt;</span></span><br><span class="line"><span class="comment">// &lt;%=baidu%&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果我们使用非惰性匹配</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'&lt;li&gt;&lt;a href="&lt;%=www.baidu.com%&gt;"&gt;&lt;%=baidu%&gt;&lt;/a&gt;&lt;/li&gt;'</span></span><br><span class="line"></span><br><span class="line">str.replace(<span class="regexp">/&lt;%=(.+)%&gt;/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">match</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(match);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// &lt;%=www.baidu.com%&gt;"&gt;&lt;%=baidu%&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="template"><a href="#template" class="headerlink" title="template"></a>template</h4><p>所需要的知识点已经过了一遍，下面是underscore模板引擎的实现</p>
+<p>与之前使用数组push，最后在用join的方法不同，underscore使用的是字符串拼接的方式。</p>
+<p>比如下面这样一段模板字符串：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;%<span class="keyword">for</span> ( <span class="keyword">var</span> i = <span class="number">0</span>; i &lt; users.length; i++ ) &#123; %&gt;</span><br><span class="line">    &lt;li&gt;</span><br><span class="line">        &lt;a href=<span class="string">"&lt;%=users[i].url%&gt;"</span>&gt;</span><br><span class="line">            &lt;%=users[i].name%&gt;</span><br><span class="line">        &lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>li&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我们先将 <code>&lt;%=xxx%&gt;</code>替换成 <code>&#39;+ xxx +&#39;</code>,在将 <code>&lt;%xxx%&gt;</code>替换成 <code>&#39;; xxx _p+=&#39;</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">';for ( var i = 0; i &lt; users.length; i++ ) &#123; __p+='</span></span><br><span class="line">    &lt;li&gt;</span><br><span class="line">        &lt;a href=<span class="string">"'+ users[i].url + '"</span>&gt;</span><br><span class="line">            <span class="string">'+ users[i].name +'</span></span><br><span class="line">        &lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>li&gt;</span><br><span class="line"><span class="string">';  &#125; __p+='</span></span><br></pre></td></tr></table></figure>
+
+<p>这段代码还不完整，还需要添加头尾代码，组合成一个完整的代码字符串：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _p=<span class="string">''</span>;</span><br><span class="line"><span class="keyword">with</span>(obj)&#123;</span><br><span class="line">    _p+=<span class="string">'</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      '</span>;<span class="keyword">for</span> ( <span class="keyword">var</span> i = <span class="number">0</span>; i &lt; users.length; i++ ) &#123; __p+=<span class="string">'</span></span><br><span class="line"><span class="string">          &lt;li&gt;</span></span><br><span class="line"><span class="string">              &lt;a href="'</span>+ users[i].url + <span class="string">'"&gt;</span></span><br><span class="line"><span class="string">                  '</span>+ users[i].name +<span class="string">'</span></span><br><span class="line"><span class="string">              &lt;/a&gt;</span></span><br><span class="line"><span class="string">          &lt;/li&gt;</span></span><br><span class="line"><span class="string">      '</span>;  &#125; __p+=<span class="string">'</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  '</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">return</span> _p;</span><br></pre></td></tr></table></figure>
+
+<p>整理下代码就是：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> __p=<span class="string">''</span>;</span><br><span class="line"><span class="keyword">with</span>(obj)&#123;</span><br><span class="line">    __p+=<span class="string">''</span>;</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">var</span> i = <span class="number">0</span>; i &lt; users.length; i++ ) &#123; </span><br><span class="line">        __p+=<span class="string">'&lt;li&gt;&lt;a href="'</span>+ users[i].url + <span class="string">'"&gt; '</span>+ users[i].name +<span class="string">'&lt;/a&gt;&lt;/li&gt;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    __p+=<span class="string">''</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">return</span> __p</span><br></pre></td></tr></table></figure>
+
+<p>然后我们将 _p 这段代码字符串传入 Function 构造函数中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> render = <span class="keyword">new</span> <span class="built_in">Function</span>(data, _p);</span><br></pre></td></tr></table></figure>
+
+<p>我们执行这个render函数，传入需要的data数据，就可以返回一段HTML字符串：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">render(data);</span><br></pre></td></tr></table></figure>
+
+<h4 id="第五版-特殊字符的处理"><a href="#第五版-特殊字符的处理" class="headerlink" title="第五版 - 特殊字符的处理"></a>第五版 - 特殊字符的处理</h4><p>这里接着上篇的第四版进行书写，不过加入对特殊字符的转义以及使用字符串拼接的方式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第五版</span></span><br><span class="line"><span class="keyword">var</span> settings = &#123;</span><br><span class="line">    <span class="comment">// 求值</span></span><br><span class="line">    evaluate: <span class="regexp">/&lt;%([\s\S]+?)%&gt;/g</span>,</span><br><span class="line">    <span class="comment">// 插入</span></span><br><span class="line">    interpolate: <span class="regexp">/&lt;%=([\s\S]+?)%&gt;/g</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> escapes = &#123;</span><br><span class="line">    <span class="string">"'"</span>: <span class="string">"'"</span>,</span><br><span class="line">    <span class="string">'\\'</span>: <span class="string">'\\'</span>,</span><br><span class="line">    <span class="string">'\r'</span>: <span class="string">'r'</span>,</span><br><span class="line">    <span class="string">'\n'</span>: <span class="string">'n'</span>,</span><br><span class="line">    <span class="string">'\u2028'</span>: <span class="string">'u2028'</span>,</span><br><span class="line">    <span class="string">'\u2029'</span>: <span class="string">'u2029'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> escapeRegExp = <span class="regexp">/\\|'|\r|\n|\u2028|\u2029/g</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> template = <span class="function"><span class="keyword">function</span>(<span class="params">text</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> source = <span class="string">"var __p='';\n"</span>;</span><br><span class="line">    source = source + <span class="string">"with(obj)&#123;\n"</span></span><br><span class="line">    source = source + <span class="string">"__p+='"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> main = text</span><br><span class="line">    .replace(escapeRegExp, <span class="function"><span class="keyword">function</span>(<span class="params">match</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'\\'</span> + escapes[match];</span><br><span class="line">    &#125;)</span><br><span class="line">    .replace(settings.interpolate, <span class="function"><span class="keyword">function</span>(<span class="params">match, interpolate</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"'+\n"</span> + interpolate + <span class="string">"+\n'"</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .replace(settings.evaluate, <span class="function"><span class="keyword">function</span>(<span class="params">match, evaluate</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"';\n "</span> + evaluate + <span class="string">"\n__p+='"</span></span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    source = source + main + <span class="string">"';\n &#125;; \n return __p;"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">console</span>.log(source)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> render = <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">'obj'</span>,  source);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> render;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="第六版-特殊值的处理"><a href="#第六版-特殊值的处理" class="headerlink" title="第六版 - 特殊值的处理"></a>第六版 - 特殊值的处理</h4><p>如果数据中 <code>users[i].url</code>不存在怎么办？此时取值的结果为undefined，我们知道</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'1'</span> + <span class="literal">undefined</span> <span class="comment">// "1undefined"</span></span><br></pre></td></tr></table></figure>
+
+<p>就相当于拼接了undefined字符串，这肯定不是我们想要的。我们可以在代码中加入一点判断：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.replace(settings.interpolate, <span class="function"><span class="keyword">function</span>(<span class="params">match, interpolate</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"'+\n"</span> + (interpolate == <span class="literal">null</span> ? <span class="string">''</span> : interpolate) + <span class="string">"+\n'"</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这里的 interpolate 有点多</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">var</span> source = <span class="string">"var __t, __p='';\n"</span>;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">   .replace(settings.interpolate, <span class="function"><span class="keyword">function</span>(<span class="params">match, interpolate</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"'+\n((__t=("</span> + interpolate + <span class="string">"))==null?'':__t)+\n'"</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>其实就相当于：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _t;</span><br><span class="line"><span class="keyword">var</span> result = (_t = interpolate) == <span class="literal">null</span> ? <span class="string">''</span> : _t</span><br></pre></td></tr></table></figure>
+
+<h4 id="第七版"><a href="#第七版" class="headerlink" title="第七版"></a>第七版</h4><p>现在我们使用的方式是将模板字符串进行多次替换，然而underscore的实现中，只进行了一次替换，我们来看看underscore是怎么实现的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> settings = &#123;</span><br><span class="line">    <span class="comment">// 求值</span></span><br><span class="line">    evaluate: <span class="regexp">/&lt;%([\s\S]+?)%&gt;/g</span>,</span><br><span class="line">    <span class="comment">// 插入</span></span><br><span class="line">    interpolate: <span class="regexp">/&lt;%=([\s\S]+?)%&gt;/g</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> template = <span class="function"><span class="keyword">function</span>(<span class="params">text</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> matcher = <span class="built_in">RegExp</span>([</span><br><span class="line">        (settings.interpolate).source,</span><br><span class="line">        (settings.evaluate).source</span><br><span class="line">    ].join(<span class="string">'|'</span>) + <span class="string">'|$'</span>, <span class="string">'g'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">var</span> source = <span class="string">"__p+='"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> escapeRegExp = <span class="regexp">/\\|'|\r|\n|\u2028|\u2029/g</span>;</span><br><span class="line"></span><br><span class="line">    text.replace(matcher, <span class="function"><span class="keyword">function</span>(<span class="params">match, interpolate, evaluate, offset</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// offset 是匹配模式在字符串中距离首个字符中间的偏移字符个数</span></span><br><span class="line">        <span class="comment">// evaluate 是 settings.evaluate 匹配到的字符串</span></span><br><span class="line">        <span class="comment">// interpolate 是 settings.evaluate 匹配到的字符串</span></span><br><span class="line">        <span class="comment">// match 表示每次匹配到的字符串 </span></span><br><span class="line">            <span class="comment">// 第一次 &lt;%=www.baidu.com%&gt;</span></span><br><span class="line">            <span class="comment">// 第二次 &lt;%baidu%&gt;</span></span><br><span class="line">    	</span><br><span class="line">        source += text.slice(index, offset).replace(escapeRegExp, <span class="function"><span class="keyword">function</span>(<span class="params">match</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">'\\'</span> + escapes[match];</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        index = offset + match.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (interpolate) &#123;</span><br><span class="line">            source += <span class="string">"'+\n((__t=("</span> + interpolate + <span class="string">"))==null?'':__t)+\n'"</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (evaluate) &#123;</span><br><span class="line">            source += <span class="string">"';\n"</span> + evaluate + <span class="string">"\n__p+='"</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> match;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    source += <span class="string">"';\n"</span>;</span><br><span class="line"></span><br><span class="line">    source = <span class="string">'with(obj||&#123;&#125;)&#123;\n'</span> + source + <span class="string">'&#125;\n'</span></span><br><span class="line"></span><br><span class="line">    source = <span class="string">"var __t, __p='';"</span> +</span><br><span class="line">        source + <span class="string">'return __p;\n'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> render = <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">'obj'</span>, source);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> render;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> str = <span class="string">'&lt;li&gt;&lt;a href="&lt;%=www.baidu.com%&gt;"&gt;&lt;%baidu%&gt;&lt;/a&gt;&lt;/li&gt;'</span></span><br><span class="line"><span class="built_in">console</span>.log(template(str))</span><br></pre></td></tr></table></figure>
+
+<p>其实原理也很简单，就是在执行多次匹配函数的时候，不断复制字符串，处理字符串，拼接字符串，最后拼接首尾代码，得到最终的代码字符串。</p>
+<p>不过值得一提的是：在这段代码里，matcher 的表达式最后为：<code>/&lt;%=([\s\S]+?)%&gt;|&lt;%([\s\S]+?)%&gt;|$/g</code></p>
+<p>问题是为什么还要加个 |$ 呢？我们来看下 $：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> str = <span class="string">"abc"</span>;</span><br><span class="line">str.replace(<span class="regexp">/$/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">match, offset</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">typeof</span> match) <span class="comment">// 空字符串</span></span><br><span class="line">    <span class="built_in">console</span>.log(offset) <span class="comment">// 3</span></span><br><span class="line">    <span class="keyword">return</span> match</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>我们之所以匹配 $，是为了获取最后一个字符串的位置，这样当我们 text.slice(index, offset)的时候，就可以截取到最后一个字符。</p>
+<h4 id="最终版"><a href="#最终版" class="headerlink" title="最终版"></a>最终版</h4><p>其实代码写到这里，就已经跟 underscore 的实现很接近了，只是 underscore 加入了更多细节的处理，比如：</p>
+<ol>
+<li>对数据的转义功能</li>
+<li>可传入配置项</li>
+<li>对错误的处理</li>
+<li>添加 source 属性，以方便查看代码字符串</li>
+<li>添加了方便调试的 print 函数<br>…<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// -----  html 代码</span></span><br><span class="line">	&lt;div id=<span class="string">"container"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">    &lt;script type=<span class="string">"text/html"</span> id=<span class="string">"user_tmpl"</span>&gt;</span><br><span class="line">        &lt;%<span class="keyword">for</span> ( <span class="keyword">var</span> i = <span class="number">0</span>; i &lt; users.length; i++ ) &#123; %&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">                &lt;a href=<span class="string">"&lt;%=users[i].url%&gt;"</span>&gt;</span><br><span class="line">                    &lt;%=users[i].name%&gt;</span><br><span class="line">                &lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">            &lt;/</span>li&gt;</span><br><span class="line">            &lt;% &#125; %&gt;</span><br><span class="line">    &lt;<span class="regexp">/script&gt;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/---------js代码</span></span><br><span class="line"><span class="regexp">/</span>**</span><br><span class="line"> * 模板引擎第八版</span><br><span class="line"> *<span class="regexp">/</span></span><br><span class="line"><span class="regexp">var _ = &#123;&#125;;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">_.templateSettings = &#123;</span></span><br><span class="line"><span class="regexp">    /</span><span class="regexp">/ 求值</span></span><br><span class="line"><span class="regexp">    evaluate: /</span><span class="xml"><span class="tag">&lt;<span class="name">%([\s\S]+?)%</span>&gt;</span>/g,</span></span><br><span class="line"><span class="xml">    // 插入</span></span><br><span class="line"><span class="xml">    interpolate: /<span class="tag">&lt;<span class="name">%=([\s\S]+?)%</span>&gt;</span>/g,</span></span><br><span class="line"><span class="xml">    // 转义</span></span><br><span class="line"><span class="xml">    escape: /<span class="tag">&lt;<span class="name">%-([\s\S]+?)%</span>&gt;</span>/g</span></span><br><span class="line"><span class="xml">&#125;;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">var noMatch = /(.)^/;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">var escapes = &#123;</span></span><br><span class="line"><span class="xml">    "'": "'",</span></span><br><span class="line"><span class="xml">    '\\': '\\',</span></span><br><span class="line"><span class="xml">    '\r': 'r',</span></span><br><span class="line"><span class="xml">    '\n': 'n',</span></span><br><span class="line"><span class="xml">    '\u2028': 'u2028',</span></span><br><span class="line"><span class="xml">    '\u2029': 'u2029'</span></span><br><span class="line"><span class="xml">&#125;;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">var escapeRegExp = /\\|'|\r|\n|\u2028|\u2029/g;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">var escapeChar = function(match) &#123;</span></span><br><span class="line"><span class="xml">    return '\\' + escapes[match];</span></span><br><span class="line"><span class="xml">&#125;;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">_.template = function(text, settings) &#123;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    settings = Object.assign(&#123;&#125;, _.templateSettings, settings);</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    var matcher = RegExp([</span></span><br><span class="line"><span class="xml">        (settings.escape || noMatch).source,</span></span><br><span class="line"><span class="xml">        (settings.interpolate || noMatch).source,</span></span><br><span class="line"><span class="xml">        (settings.evaluate || noMatch).source</span></span><br><span class="line"><span class="xml">    ].join('|') + '|$', 'g');</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    var index = 0;</span></span><br><span class="line"><span class="xml">    var source = "__p+='";</span></span><br><span class="line"><span class="xml">    text.replace(matcher, function(match, escape, interpolate, evaluate, offset) &#123;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">        source += text.slice(index, offset).replace(escapeRegExp, escapeChar);</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">        index = offset + match.length;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">        if (escape) &#123;</span></span><br><span class="line"><span class="xml">            source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";</span></span><br><span class="line"><span class="xml">        &#125; else if (interpolate) &#123;</span></span><br><span class="line"><span class="xml">            source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";</span></span><br><span class="line"><span class="xml">        &#125; else if (evaluate) &#123;</span></span><br><span class="line"><span class="xml">            source += "';\n" + evaluate + "\n__p+='";</span></span><br><span class="line"><span class="xml">        &#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">        return match;</span></span><br><span class="line"><span class="xml">    &#125;);</span></span><br><span class="line"><span class="xml">    source += "';\n";</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    if (!settings.variable) source = 'with(obj||&#123;&#125;)&#123;\n' + source + '&#125;\n';</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    source = "var __t,__p='',__j=Array.prototype.join," +</span></span><br><span class="line"><span class="xml">        "print=function()&#123;__p+=__j.call(arguments,'');&#125;;\n" +</span></span><br><span class="line"><span class="xml">        source + 'return __p;\n';</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    var render;</span></span><br><span class="line"><span class="xml">    try &#123;</span></span><br><span class="line"><span class="xml">        render = new Function(settings.variable || 'obj', '_', source);</span></span><br><span class="line"><span class="xml">    &#125; catch (e) &#123;</span></span><br><span class="line"><span class="xml">        e.source = source;</span></span><br><span class="line"><span class="xml">        throw e;</span></span><br><span class="line"><span class="xml">    &#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    var template = function(data) &#123;</span></span><br><span class="line"><span class="xml">        return render.call(this, data, _);</span></span><br><span class="line"><span class="xml">    &#125;;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    var argument = settings.variable || 'obj';</span></span><br><span class="line"><span class="xml">    template.source = 'function(' + argument + ')&#123;\n' + source + '&#125;';</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">    return template;</span></span><br><span class="line"><span class="xml">&#125;;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">var results = document.getElementById("container");</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">var data = &#123;</span></span><br><span class="line"><span class="xml">    users: [</span></span><br><span class="line"><span class="xml">        &#123; "name": "Byron", "url": "http://localhost" &#125;,</span></span><br><span class="line"><span class="xml">        &#123; "name": "Casper", "url": "http://localhost" &#125;,</span></span><br><span class="line"><span class="xml">        &#123; "name": "Frank", "url": "http://localhost" &#125;</span></span><br><span class="line"><span class="xml">    ]</span></span><br><span class="line"><span class="xml">&#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">var text = document.getElementById("user_tmpl").innerHTML</span></span><br><span class="line"><span class="xml">var compiled = _.template(text);</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">console.log(compiled.source)</span></span><br><span class="line"><span class="xml">results.innerHTML = compiled(data);</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+      
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/underscore/" rel="tag"># underscore</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/11/underScore之模板引擎（上）/" rel="next" title="underScore之模板引擎（上）">
+                <i class="fa fa-chevron-left"></i> underScore之模板引擎（上）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  
+    <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="blue">
+  
+  <p class="site-author-name" itemprop="name">blue</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+
+
+  <nav class="site-state motion-element">
+    
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+
+    
+
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+          
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#转义序列"><span class="nav-number">1.</span> <span class="nav-text">转义序列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Line-Terminators"><span class="nav-number">2.</span> <span class="nav-text">Line Terminators</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Function"><span class="nav-number">3.</span> <span class="nav-text">Function</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特殊字符"><span class="nav-number">4.</span> <span class="nav-text">特殊字符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#replace"><span class="nav-number">5.</span> <span class="nav-text">replace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则表达式的创建"><span class="nav-number">6.</span> <span class="nav-text">正则表达式的创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则表达式的特殊字符"><span class="nav-number">7.</span> <span class="nav-text">正则表达式的特殊字符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#惰性匹配"><span class="nav-number">8.</span> <span class="nav-text">惰性匹配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#template"><span class="nav-number">9.</span> <span class="nav-text">template</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五版-特殊字符的处理"><span class="nav-number">10.</span> <span class="nav-text">第五版 - 特殊字符的处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第六版-特殊值的处理"><span class="nav-number">11.</span> <span class="nav-text">第六版 - 特殊值的处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第七版"><span class="nav-number">12.</span> <span class="nav-text">第七版</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最终版"><span class="nav-number">13.</span> <span class="nav-text">最终版</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-fas fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">blue</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  
+
+  
+
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// GET RESPONSIVE HEIGHT PASSED FROM IFRAME
+
+window.addEventListener("message", function(e) {
+  var data = e.data;
+  if ((typeof data === 'string') && (data.indexOf('ciu_embed') > -1)) {
+    var featureID = data.split(':')[1];
+    var height = data.split(':')[2];
+    $(`iframe[data-feature=${featureID}]`).height(parseInt(height) + 30);
+  }
+}, false);
+</script>
+
+
+
+
+
+
+
+
+  
+
+</body>
+</html>
