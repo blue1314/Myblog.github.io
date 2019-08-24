@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: ''
+    },
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="Mixin模式在C++和Lisp等传统编程语言中，Mixin是可以轻松被一个子类或一组子类继承功能的类，目的是函数复用。 子类化子类化这个术语是指针对一个新对象，从一个基础或超类对象中继承相关的属性。在传统的面向对象编程中，类B是从另外一个类A扩展得来。这里我们认为A是一个超类，B是A的一个子类。因此，B的所有实例从A处继承了相关方法。但是B仍然能够定义自己的方法，包括那些A最初定义方法的重写。">
+<meta name="keywords" content="js设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javaScript设计模式-Mixin模式">
+<meta property="og:url" content="http://yoursite.com/2019/08/24/javaScript设计模式-Mixin模式/index.html">
+<meta property="og:site_name" content="blue的个人博客">
+<meta property="og:description" content="Mixin模式在C++和Lisp等传统编程语言中，Mixin是可以轻松被一个子类或一组子类继承功能的类，目的是函数复用。 子类化子类化这个术语是指针对一个新对象，从一个基础或超类对象中继承相关的属性。在传统的面向对象编程中，类B是从另外一个类A扩展得来。这里我们认为A是一个超类，B是A的一个子类。因此，B的所有实例从A处继承了相关方法。但是B仍然能够定义自己的方法，包括那些A最初定义方法的重写。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-24T13:03:54.196Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="javaScript设计模式-Mixin模式">
+<meta name="twitter:description" content="Mixin模式在C++和Lisp等传统编程语言中，Mixin是可以轻松被一个子类或一组子类继承功能的类，目的是函数复用。 子类化子类化这个术语是指针对一个新对象，从一个基础或超类对象中继承相关的属性。在传统的面向对象编程中，类B是从另外一个类A扩展得来。这里我们认为A是一个超类，B是A的一个子类。因此，B的所有实例从A处继承了相关方法。但是B仍然能够定义自己的方法，包括那些A最初定义方法的重写。">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/08/24/javaScript设计模式-Mixin模式/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  
+  <title>javaScript设计模式-Mixin模式 | blue的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">blue的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">每天学习进步，贵在坚持</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/javaScript设计模式-Mixin模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="blue">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blue的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">javaScript设计模式-Mixin模式
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-24 19:46:54 / 修改时间：21:03:54" itemprop="dateCreated datePublished" datetime="2019-08-24T19:46:54+08:00">2019-08-24</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Mixin模式"><a href="#Mixin模式" class="headerlink" title="Mixin模式"></a>Mixin模式</h4><p>在C++和Lisp等传统编程语言中，Mixin是可以轻松被一个子类或一组子类继承功能的类，目的是函数复用。</p>
+<h4 id="子类化"><a href="#子类化" class="headerlink" title="子类化"></a>子类化</h4><p><code>子类化</code>这个术语是指针对一个新对象，从一个基础或超类对象中继承相关的属性。在传统的面向对象编程中，类B是从另外一个类A扩展得来。这里我们认为A是一个超类，B是A的一个子类。因此，B的所有实例从A处继承了相关方法。但是B仍然能够定义自己的方法，包括那些A最初定义方法的重写。</p>
+<p>A中的一个方法，在B中已经被重写了，那么B还需要调用A中的这个方法吗，我们称此为方法链。B需要调用构造函数A吗，我们称此为构造函数链。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Person = <span class="function"><span class="keyword">function</span>(<span class="params">firstName, lastName</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.firstName = firstName;</span><br><span class="line">    <span class="keyword">this</span>.lastName = lastName;</span><br><span class="line">    <span class="keyword">this</span>.gender = <span class="string">'male'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> clark = <span class="keyword">new</span> Person(<span class="string">'Clark'</span>, <span class="string">"Blue"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Superhero = <span class="function"><span class="keyword">function</span>(<span class="params">firstName, lastName, powers</span>) </span>&#123;</span><br><span class="line">    Person.call(<span class="keyword">this</span>, firstName, lastName);</span><br><span class="line">    <span class="keyword">this</span>.powers = powers;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Superhero.prototype = <span class="built_in">Object</span>.create(Person.prototype);</span><br><span class="line"><span class="keyword">var</span> superman = <span class="keyword">new</span> Superhero(<span class="string">'Clark'</span>, <span class="string">'Blue'</span>, [<span class="string">"flight"</span>, <span class="string">"heat-vision"</span>]);</span><br><span class="line"><span class="built_in">console</span>.log(superman)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Mixin-混入"><a href="#Mixin-混入" class="headerlink" title="Mixin(混入)"></a>Mixin(混入)</h4><p>在Javascript中，我们可以将继承Mixin看作为一种通过扩展收集功能的方式。我们定义的每个新对象都有一个原型，可以从中继承更多属性。原型可以继承于其他对象的原型，但更重要的是，它可以为任意数量的对象实例定义属性。可以利用者一点来促进函数复用。</p>
+<p>我们在标准对象字面量中定义一个包含实用函数的Mixin</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myMixins = &#123;</span><br><span class="line">    	moveUp: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    		<span class="built_in">console</span>.log(<span class="string">'move up'</span>);</span><br><span class="line">    	&#125;,</span><br><span class="line">    	</span><br><span class="line">    	moveDown: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    		<span class="built_in">console</span>.log(<span class="string">'move down'</span>);</span><br><span class="line">    	&#125;,</span><br><span class="line">    	</span><br><span class="line">    	stop: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    		<span class="built_in">console</span>.log(<span class="string">'stop! in the name of love'</span>);</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">carAnimator</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    	<span class="keyword">this</span>.moveLeft = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    		<span class="built_in">console</span>.log(<span class="string">'move left'</span>);</span><br><span class="line">    	&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">personAnimator</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    	<span class="keyword">this</span>.moveRandomly = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    		<span class="built_in">console</span>.log(<span class="string">'move randomly'</span>)</span><br><span class="line">    	&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    _.extend(carAnimator.prototype, myMixins);</span><br><span class="line">    _.extend(personAnimator.prototype, myMixins);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> myAnimator = <span class="keyword">new</span> carAnimator();</span><br><span class="line">    	myAnimator.moveLeft(); <span class="comment">// move left</span></span><br><span class="line">    	myAnimator.moveDown(); <span class="comment">// move down</span></span><br><span class="line">    	myAnimator.stop(); <span class="comment">// stop! in the name of love</span></span><br><span class="line">    <span class="keyword">var</span> myPersonAnimator = <span class="keyword">new</span> personAnimator();</span><br><span class="line">    	myPersonAnimator.moveRandomly(); <span class="comment">// move left</span></span><br><span class="line">    	myPersonAnimator.moveDown();<span class="comment">// move down</span></span><br><span class="line">    	myPersonAnimator.stop();<span class="comment">// stop! in the name of love</span></span><br></pre></td></tr></table></figure>
+
+<p>正如我们所看到的，这允许我们以通用的方式轻松“混入”对象构造函数</p>
+<p>在下一个示例中，我们有两个构造函数：Car和Mixin。我们要做的是扩充（扩展的另一种说法）Car，以便它可以继承Mixin中定义的特定方法，即driveForward()和driveBackward()。这次我们不会实用underscore.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Car = <span class="function"><span class="keyword">function</span>(<span class="params">settings</span>) </span>&#123;</span><br><span class="line">    	<span class="keyword">this</span>.model = settings.model || <span class="string">'no model provided'</span>;</span><br><span class="line">    	<span class="keyword">this</span>.color = settings.color || <span class="string">'no clolor provided'</span>;</span><br><span class="line">    	</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Mixin</span></span><br><span class="line">    <span class="keyword">var</span> Mixin = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line">    </span><br><span class="line">    Mixin.prototype = &#123;</span><br><span class="line">    	driveForward: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    		<span class="built_in">console</span>.log(<span class="string">'drive forward'</span>);</span><br><span class="line">    	&#125;,</span><br><span class="line">    	</span><br><span class="line">    	driveBackward: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    		<span class="built_in">console</span>.log(<span class="string">'drive backward'</span>);</span><br><span class="line">    	&#125;,</span><br><span class="line">    	</span><br><span class="line">    	driveSideways: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    		<span class="built_in">console</span>.log(<span class="string">'drive sideways'</span>);</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 通过这个方法将现有的对象扩展到另外一个对象上</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">augment</span>(<span class="params">receivingClass, givingClass</span>) </span>&#123;</span><br><span class="line">    	<span class="comment">// 如果给了指定混合的属性名</span></span><br><span class="line">    	<span class="keyword">if</span>(<span class="built_in">arguments</span>[<span class="number">2</span>]) &#123; </span><br><span class="line">    		<span class="comment">// 把givingClass--&gt;Mixin的属性给到receivingClass--&gt;Car对象</span></span><br><span class="line">    		<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">2</span>, len = <span class="built_in">arguments</span>.length; i &lt; len; i++) &#123;</span><br><span class="line">    			receivingClass.prototype[<span class="built_in">arguments</span>[i]] = givingClass.prototype[<span class="built_in">arguments</span>[i]];</span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125; <span class="keyword">else</span> &#123; <span class="comment">// 默认混合所有的属性名</span></span><br><span class="line">    		<span class="keyword">for</span>(<span class="keyword">var</span> methodName <span class="keyword">in</span> givingClass.prototype) &#123;</span><br><span class="line">    			<span class="comment">// 只混合自定义的属性</span></span><br><span class="line">    			<span class="keyword">if</span>(!<span class="built_in">Object</span>.hasOwnProperty(receivingClass.prototype, methodName)) &#123;</span><br><span class="line">    				receivingClass.prototype[methodName] = givingClass.prototype[methodName];</span><br><span class="line">    			&#125;</span><br><span class="line">    			<span class="comment">// 另一种方式</span></span><br><span class="line"><span class="comment">//  			if(!receivingClass.prototype[methodName]) &#123;</span></span><br><span class="line"><span class="comment">//  				receivingClass.prototype[methodName] = givingClass.prototype[methodName];</span></span><br><span class="line"><span class="comment">//  			&#125;</span></span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 给Car构造函数增加"driveForward"和"driveBackward"两个方法</span></span><br><span class="line">    augment(Car, Mixin, <span class="string">"driveForward"</span>, <span class="string">"driveBackward"</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建一个新Car</span></span><br><span class="line">    <span class="keyword">var</span> myCar = <span class="keyword">new</span> Car(&#123;</span><br><span class="line">    	model: <span class="string">'Ford Escort'</span>,</span><br><span class="line">    	color: <span class="string">'blue'</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 测试确保新增方法可用</span></span><br><span class="line">    myCar.driveForward();</span><br><span class="line">    myCar.driveBackward();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 也可以通过不声明特定方法名的形式，将Mixin的所有方法都添加到Car里</span></span><br><span class="line">    augment(Car, Mixin);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> mySportCar = <span class="keyword">new</span> Car(&#123;</span><br><span class="line">    	model: <span class="string">'Porsche'</span>,</span><br><span class="line">    	color: <span class="string">'red'</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    mySportCar.driveSideways();</span><br></pre></td></tr></table></figure>
+
+<h4 id="优点和缺点"><a href="#优点和缺点" class="headerlink" title="优点和缺点"></a>优点和缺点</h4><p>Mixin有助于减少系统种的重复功能及增加函数复用。当一个应用程序可能需要在各种对象实例中共享行为时，我们可以通过在Mixin中维持这种共享功能并专注于仅实现系统中真正不同的功能，来轻松避免任何重复。</p>
+<p>有些开发人员认为将功能注入对象原型是一种很糟糕的想法，因为它会导致原型污染和函数起源方面的不确定性。在大型系统中，可能就会有这种情况。</p>
+
+      
+    </div>
+
+    
+
+    
+      
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/js设计模式/" rel="tag"># js设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/24/javaScript设计模式-工厂模式/" rel="next" title="javaScript设计模式-Factory（工厂）模式">
+                <i class="fa fa-chevron-left"></i> javaScript设计模式-Factory（工厂）模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  
+    <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="blue">
+  
+  <p class="site-author-name" itemprop="name">blue</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+
+
+  <nav class="site-state motion-element">
+    
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+
+    
+
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+          
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Mixin模式"><span class="nav-number">1.</span> <span class="nav-text">Mixin模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#子类化"><span class="nav-number">2.</span> <span class="nav-text">子类化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mixin-混入"><span class="nav-number">3.</span> <span class="nav-text">Mixin(混入)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优点和缺点"><span class="nav-number">4.</span> <span class="nav-text">优点和缺点</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-fas fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">blue</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  
+
+  
+
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// GET RESPONSIVE HEIGHT PASSED FROM IFRAME
+
+window.addEventListener("message", function(e) {
+  var data = e.data;
+  if ((typeof data === 'string') && (data.indexOf('ciu_embed') > -1)) {
+    var featureID = data.split(':')[1];
+    var height = data.split(':')[2];
+    $(`iframe[data-feature=${featureID}]`).height(parseInt(height) + 30);
+  }
+}, false);
+</script>
+
+
+
+
+
+
+
+
+  
+
+</body>
+</html>
