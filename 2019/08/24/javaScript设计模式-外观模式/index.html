@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: ''
+    },
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="Facade（外观）模式Facade 模式为更大的代码体提供了一个方便的更高层次接口，能够隐蔽其底层的真实复杂性。可以把它想象成是简化 API 来展示给其他开发人员，通常都是可以提高可用性 Facade 是一种结构型模式，在 jQuery 等 JavaScript 库中进程可以看到，尽管一个实现可能支持具有广泛行为的方法，但却只有一个“外观”或这些方法的有限抽象能够提供给公总使用。 每当使用 jQ">
+<meta name="keywords" content="js设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javaScript设计模式-Facade（外观）模式">
+<meta property="og:url" content="http://yoursite.com/2019/08/24/javaScript设计模式-外观模式/index.html">
+<meta property="og:site_name" content="blue的个人博客">
+<meta property="og:description" content="Facade（外观）模式Facade 模式为更大的代码体提供了一个方便的更高层次接口，能够隐蔽其底层的真实复杂性。可以把它想象成是简化 API 来展示给其他开发人员，通常都是可以提高可用性 Facade 是一种结构型模式，在 jQuery 等 JavaScript 库中进程可以看到，尽管一个实现可能支持具有广泛行为的方法，但却只有一个“外观”或这些方法的有限抽象能够提供给公总使用。 每当使用 jQ">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-24T09:40:27.686Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="javaScript设计模式-Facade（外观）模式">
+<meta name="twitter:description" content="Facade（外观）模式Facade 模式为更大的代码体提供了一个方便的更高层次接口，能够隐蔽其底层的真实复杂性。可以把它想象成是简化 API 来展示给其他开发人员，通常都是可以提高可用性 Facade 是一种结构型模式，在 jQuery 等 JavaScript 库中进程可以看到，尽管一个实现可能支持具有广泛行为的方法，但却只有一个“外观”或这些方法的有限抽象能够提供给公总使用。 每当使用 jQ">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/08/24/javaScript设计模式-外观模式/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  
+  <title>javaScript设计模式-Facade（外观）模式 | blue的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">blue的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">每天学习进步，贵在坚持</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/javaScript设计模式-外观模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="blue">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blue的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">javaScript设计模式-Facade（外观）模式
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-24 16:51:19 / 修改时间：17:40:27" itemprop="dateCreated datePublished" datetime="2019-08-24T16:51:19+08:00">2019-08-24</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Facade（外观）模式"><a href="#Facade（外观）模式" class="headerlink" title="Facade（外观）模式"></a>Facade（外观）模式</h4><p>Facade 模式为更大的代码体提供了一个方便的更高层次接口，能够隐蔽其底层的真实复杂性。可以把它想象成是简化 API 来展示给其他开发人员，通常都是可以提高可用性</p>
+<p>Facade 是一种结构型模式，在 jQuery 等 JavaScript 库中进程可以看到，尽管一个实现可能支持具有广泛行为的方法，但却只有一个“外观”或这些方法的有限抽象能够提供给公总使用。</p>
+<p>每当使用 jQuery 的$(el).css() 或 $(el).animate()方法时，实际上我们时在使用 Facade：一种更简单的公有接口，是我们不必手动在 jQuery 核心中调用更多内部很多方法以便实现某些行为。这也避免了手动与 DOM API 交互并维护状态变量的需要</p>
+<p>jQuery 核心方法应该被认为时中间抽象。对于开发人员来说，更直接的事是 DOM API，外观可以使 jQuery 库很容易使用</p>
+<p>这是一个未优化的代码示例，但在这里，我们使用 Facade 来简化用于监听跨浏览器事件的接口。为此，创建一个可以用于某些代码的通用方法，该代码的任务是检查特性的存在，以便能够提供一个安全的、跨浏览器的兼容解决方案。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> addMyEvent = <span class="function"><span class="keyword">function</span>(<span class="params">el, ev, fn</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(el.addEventListener) &#123;</span><br><span class="line">        el.addEventListener(ev, fn, <span class="literal">false</span>)<span class="string">''</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(el.attachEvent) &#123;</span><br><span class="line">        el.attachEvent(<span class="string">"on"</span> + ev, fn);</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        el[<span class="string">'on'</span> + ev] = fn;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>我们都很熟悉的jQuery的$(document).ready(..), 采用了类似的方式。在内部，它实际上是使用了一个被称为bindReady()的方法，它是这样做的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// jQuery 1.72</span></span><br><span class="line">bindReady: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">document</span>.addEventListener)&#123;</span><br><span class="line">        <span class="comment">//使用便利的事件回调</span></span><br><span class="line">        <span class="built_in">document</span>.addEventListener(<span class="string">"DOMContentLoaded"</span>, DOMContentLoaded, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//可靠的window.onload始终可用</span></span><br><span class="line">        <span class="built_in">window</span>.addEventListener(<span class="string">"load"</span>, jQuery.ready, <span class="literal">false</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( <span class="built_in">document</span>.attachEvent)&#123; <span class="comment">//如果是IE事件模型 </span></span><br><span class="line">        <span class="built_in">document</span>.attachEvent(<span class="string">"onreadystatechange"</span>, DOMContentLoaded);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 可靠的window.onload 始终可用</span></span><br><span class="line">        <span class="built_in">window</span>.attachEvent(<span class="string">"onload"</span>, jQuery.ready);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>DOMContentLoaded 事件<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DOMContentLoaded不同的浏览器对其支持不同，所以在实现的时候我们需要做不同浏览器的兼容。</span><br><span class="line"></span><br><span class="line">  1）支持DOMContentLoaded事件的，就使用DOMContentLoaded事件；</span><br><span class="line"></span><br><span class="line">  2）IE6、IE7不支持DOMContentLoaded，但它支持onreadystatechange事件，该事件的目的是提供与文档或元素的加载状态有关的信息。</span><br><span class="line"></span><br><span class="line">  3）更低的ie还有个特有的方法doScroll， 通过间隔调用：document.documentElement.doScroll(&quot;left&quot;);</span><br><span class="line"></span><br><span class="line">  可以检测DOM是否加载完成。 当页面未加载完成时，该方法会报错，直到doScroll不再报错时，就代表DOM加载完成了。该方法更接近DOMContentLoaded的实现。</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>  Facade不是必须单独使用。它们也可以与其他模式集成，如Module模式。<br>  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">var</span> <span class="built_in">module</span> = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">   	<span class="keyword">var</span> _private = &#123;</span><br><span class="line">   		i: <span class="number">5</span>,</span><br><span class="line">   		<span class="keyword">get</span>: function() &#123;</span><br><span class="line">   			<span class="built_in">console</span>.log(<span class="string">"current value:"</span> + <span class="keyword">this</span>.i);</span><br><span class="line">   		&#125;,</span><br><span class="line">   		<span class="keyword">set</span>: function(val) &#123;</span><br><span class="line">   			<span class="keyword">this</span>.i = val;</span><br><span class="line">   		&#125;,</span><br><span class="line">   		run: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">   			<span class="built_in">console</span>.log(<span class="string">"running"</span>);</span><br><span class="line">   		&#125;,</span><br><span class="line">   		jump: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">   			<span class="built_in">console</span>.log(<span class="string">"jumping"</span>)</span><br><span class="line">   		&#125;</span><br><span class="line">   	&#125;;</span><br><span class="line">   	</span><br><span class="line">   	<span class="keyword">return</span> &#123;</span><br><span class="line">   		facade: <span class="function"><span class="keyword">function</span>(<span class="params">args</span>) </span>&#123;</span><br><span class="line">   			_private.set(args.val);</span><br><span class="line">   			_private.get();</span><br><span class="line">   			<span class="keyword">if</span>(args.run) &#123;</span><br><span class="line">   				_private.run();</span><br><span class="line">   			&#125;</span><br><span class="line">   		&#125;</span><br><span class="line">   	&#125;;</span><br><span class="line">   &#125;)()</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.facade(&#123;</span><br><span class="line">	run: <span class="literal">true</span>,</span><br><span class="line">	val: <span class="number">20</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>在这个示例中，调用module.facade()实际上会在该模块中触发一系列的私有行为，但用户不会接触到。我们让facade变成一个不需要关注实现细节，而且更容易使用的一个特性。</p>
+<p>当使用Facade模式时，要试着了解涉及的任何性能成本，并确认是否值得抽象。</p>
+
+      
+    </div>
+
+    
+
+    
+      
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/js设计模式/" rel="tag"># js设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/23/javaScript设计模式-命令模式/" rel="next" title="javaScript设计模式-命令模式">
+                <i class="fa fa-chevron-left"></i> javaScript设计模式-命令模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/24/javaScript设计模式-工厂模式/" rel="prev" title="javaScript设计模式-Factory（工厂）模式">
+                javaScript设计模式-Factory（工厂）模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  
+    <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="blue">
+  
+  <p class="site-author-name" itemprop="name">blue</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+
+
+  <nav class="site-state motion-element">
+    
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+
+    
+
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+          
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Facade（外观）模式"><span class="nav-number">1.</span> <span class="nav-text">Facade（外观）模式</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-fas fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">blue</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  
+
+  
+
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// GET RESPONSIVE HEIGHT PASSED FROM IFRAME
+
+window.addEventListener("message", function(e) {
+  var data = e.data;
+  if ((typeof data === 'string') && (data.indexOf('ciu_embed') > -1)) {
+    var featureID = data.split(':')[1];
+    var height = data.split(':')[2];
+    $(`iframe[data-feature=${featureID}]`).height(parseInt(height) + 30);
+  }
+}, false);
+</script>
+
+
+
+
+
+
+
+
+  
+
+</body>
+</html>

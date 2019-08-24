@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: ''
+    },
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="Factory模式是另一种创建型模式，涉及创建对象的概念。其分类不同于其他模式的地方在于它不是显式地要求使用一个构造函数。而Factory可以提供一个通用的接口来创建对象，我们可以指定我们所希望创建的工厂对象的类型下面这个示例构建在之前的代码片段之上，使用Constructor模式逻辑来定义汽车。 12345678910111213141516171819202122232425262728293">
+<meta name="keywords" content="js设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javaScript设计模式-Factory（工厂）模式">
+<meta property="og:url" content="http://yoursite.com/2019/08/24/javaScript设计模式-工厂模式/index.html">
+<meta property="og:site_name" content="blue的个人博客">
+<meta property="og:description" content="Factory模式是另一种创建型模式，涉及创建对象的概念。其分类不同于其他模式的地方在于它不是显式地要求使用一个构造函数。而Factory可以提供一个通用的接口来创建对象，我们可以指定我们所希望创建的工厂对象的类型下面这个示例构建在之前的代码片段之上，使用Constructor模式逻辑来定义汽车。 12345678910111213141516171819202122232425262728293">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-24T11:36:56.680Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="javaScript设计模式-Factory（工厂）模式">
+<meta name="twitter:description" content="Factory模式是另一种创建型模式，涉及创建对象的概念。其分类不同于其他模式的地方在于它不是显式地要求使用一个构造函数。而Factory可以提供一个通用的接口来创建对象，我们可以指定我们所希望创建的工厂对象的类型下面这个示例构建在之前的代码片段之上，使用Constructor模式逻辑来定义汽车。 12345678910111213141516171819202122232425262728293">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/08/24/javaScript设计模式-工厂模式/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  
+  <title>javaScript设计模式-Factory（工厂）模式 | blue的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">blue的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">每天学习进步，贵在坚持</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/javaScript设计模式-工厂模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="blue">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blue的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">javaScript设计模式-Factory（工厂）模式
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-24 17:40:44 / 修改时间：19:36:56" itemprop="dateCreated datePublished" datetime="2019-08-24T17:40:44+08:00">2019-08-24</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Factory模式是另一种创建型模式，涉及创建对象的概念。其分类不同于其他模式的地方在于它不是显式地要求使用一个构造函数。而Factory可以提供一个通用的接口来创建对象，我们可以指定我们所希望创建的工厂对象的类型"><a href="#Factory模式是另一种创建型模式，涉及创建对象的概念。其分类不同于其他模式的地方在于它不是显式地要求使用一个构造函数。而Factory可以提供一个通用的接口来创建对象，我们可以指定我们所希望创建的工厂对象的类型" class="headerlink" title="Factory模式是另一种创建型模式，涉及创建对象的概念。其分类不同于其他模式的地方在于它不是显式地要求使用一个构造函数。而Factory可以提供一个通用的接口来创建对象，我们可以指定我们所希望创建的工厂对象的类型"></a>Factory模式是另一种创建型模式，涉及创建对象的概念。其分类不同于其他模式的地方在于它不是显式地要求使用一个构造函数。而Factory可以提供一个通用的接口来创建对象，我们可以指定我们所希望创建的工厂对象的类型</h4><p>下面这个示例构建在之前的代码片段之上，使用Constructor模式逻辑来定义汽车。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Car</span>(<span class="params">options = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">     	<span class="keyword">this</span>.doors = options.doors || <span class="number">4</span>;</span><br><span class="line">     	<span class="keyword">this</span>.state = options.state || <span class="string">"brand new"</span>;</span><br><span class="line">     	<span class="keyword">this</span>.color = options.color || <span class="string">"silver"</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br><span class="line">     <span class="comment">//定义Truck构造函数</span></span><br><span class="line">     <span class="function"><span class="keyword">function</span> <span class="title">Truck</span>(<span class="params">options = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">     	<span class="keyword">this</span>.state = options.state || <span class="string">"used"</span>;</span><br><span class="line">     	<span class="keyword">this</span>.wheelSize = options.wheelSize || <span class="string">'large'</span>;</span><br><span class="line">     	<span class="keyword">this</span>.color = options.color || <span class="string">'blue'</span>;</span><br><span class="line">     &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">     <span class="function"><span class="keyword">function</span> <span class="title">VehicleFactory</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">     </span><br><span class="line">     VehicleFactory.prototype.vehicleClass = Car;</span><br><span class="line">     </span><br><span class="line">     VehicleFactory.prototype.createVehicle = <span class="function"><span class="keyword">function</span>(<span class="params">options</span>) </span>&#123;</span><br><span class="line">     	<span class="keyword">if</span>(options.vehicleType === <span class="string">'car'</span>) &#123;</span><br><span class="line">     		<span class="keyword">this</span>.vehicleClass = Car;</span><br><span class="line">     	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">     		<span class="keyword">this</span>.vehicleClass = Truck;</span><br><span class="line">     	&#125;</span><br><span class="line">     	</span><br><span class="line">     	<span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">this</span>.vehicleClass(options);</span><br><span class="line">     &#125;;</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">var</span> carFactory = <span class="keyword">new</span> VehicleFactory();</span><br><span class="line">     <span class="keyword">var</span> car = carFactory.createVehicle(&#123;</span><br><span class="line">     	vehicleType: <span class="string">'car'</span>,</span><br><span class="line">     	color: <span class="string">'yellow'</span>,</span><br><span class="line">     	doors: <span class="number">6</span>,</span><br><span class="line">     &#125;)</span><br><span class="line">     </span><br><span class="line">     <span class="built_in">console</span>.log(car <span class="keyword">instanceof</span> Car);</span><br><span class="line">     <span class="built_in">console</span>.log(car);</span><br></pre></td></tr></table></figure>
+
+<p>在方法1中，我们修改了VehicleFactory实例来使用Truck类：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> movingTruck = carFactory.createVehicle(&#123;</span><br><span class="line">     	vehicleType: <span class="string">'truck'</span>,</span><br><span class="line">     	state: <span class="string">'like new'</span>,</span><br><span class="line">     	color: <span class="string">'red'</span>,</span><br><span class="line">     	wheelSize: <span class="string">'small'</span></span><br><span class="line">     &#125;)</span><br><span class="line">     </span><br><span class="line">     <span class="built_in">console</span>.log(movingTruck <span class="keyword">instanceof</span> Truck);</span><br><span class="line">     <span class="built_in">console</span>.log(movingTruck);</span><br></pre></td></tr></table></figure>
+
+<p>在方法2中，我们把VehicleFactory归入子类来创建一个构建Truck的工厂类:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">TruckFactory</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	TruckFactory.prototype = <span class="keyword">new</span> VehicleFactory();</span><br><span class="line">	TruckFactory.prototype.vehicleClass = Truck;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">var</span> truckFactory = <span class="keyword">new</span> TruckFactory();</span><br><span class="line">	<span class="keyword">var</span> myBigTruck = truckFactory.createVehicle(&#123;</span><br><span class="line">		state: <span class="string">'omg..so bad'</span>,</span><br><span class="line">		color: <span class="string">'pink'</span>,</span><br><span class="line">		wheelSize: <span class="string">'so big'</span>,</span><br><span class="line">	&#125;)</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">console</span>.log(myBigTruck <span class="keyword">instanceof</span> Truck);</span><br><span class="line">	<span class="built_in">console</span>.log(myBigTruck)</span><br></pre></td></tr></table></figure>
+
+<h4 id="何时使用Factory模式"><a href="#何时使用Factory模式" class="headerlink" title="何时使用Factory模式"></a>何时使用Factory模式</h4><p>Factory模式应用于如下场景是特别有用的:</p>
+<ol>
+<li>当对象或组件设置涉及高复杂性时</li>
+<li>当需要根据所在的不同环境轻松生成对象或组件时</li>
+<li>当处理很多共享相同属性的小型对象或组件时</li>
+<li>在编写只需要满足一个API契约（亦称鸭子类型）的其他对象的实例对象时</li>
+</ol>
+<h4 id="何时不应使用Factory模式"><a href="#何时不应使用Factory模式" class="headerlink" title="何时不应使用Factory模式"></a>何时不应使用Factory模式</h4><p>如果应用错误，这种模式会为应用程序带来大量不必要的复杂性。除非为创建对象提供一个接口是我们正在编写的库或框架的设计目标，否则建议坚持使用显示构造函数，以避免不必要的开销。</p>
+<h4 id="Abstract-Factory（抽象工厂）"><a href="#Abstract-Factory（抽象工厂）" class="headerlink" title="Abstract Factory（抽象工厂）"></a>Abstract Factory（抽象工厂）</h4><p>它用于封装一组具有共同目标的单个东厂。它能够将一组对象的实现细节从一般用法中分离出来。</p>
+<p>应当使用抽象工厂模式的情况是：一个系统必须独立于它所创建的对象的生成方式，或它需要与多种对象类型一起工作。</p>
+<p>既简单由容易理解的示例是车辆工厂，它定义了获取注册车辆类型的方法。抽象工厂可以命名为AbstractVehicleFactory。抽象工厂允许对象car或truck这样的车辆类型进行定义，具体工厂只需要实现履行车辆契约的类（如：Vehicle.prorotype.drive和Vehicle.prototype.breakDown）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> AbstractVehicleFactory = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    	</span><br><span class="line">   <span class="comment">// 存储车辆类型</span></span><br><span class="line">   <span class="keyword">var</span> types = &#123;&#125;;</span><br><span class="line">   </span><br><span class="line">   <span class="keyword">return</span> &#123;</span><br><span class="line">       getVehicle: <span class="function"><span class="keyword">function</span>(<span class="params">type, customizations</span>) </span>&#123;</span><br><span class="line">           <span class="keyword">var</span> Vehicle = types[type];</span><br><span class="line"></span><br><span class="line">           <span class="keyword">return</span> (Vehicle) ? <span class="keyword">new</span> Vehicle(customizations) : <span class="literal">null</span>;</span><br><span class="line">       &#125;,</span><br><span class="line">       </span><br><span class="line">       registerVehicle: <span class="function"><span class="keyword">function</span>(<span class="params">type, Vehicle</span>) </span>&#123;</span><br><span class="line">           <span class="keyword">var</span> proto = Vehicle.prototype;</span><br><span class="line">           <span class="keyword">var</span> v = <span class="keyword">new</span> Vehicle();</span><br><span class="line">           <span class="comment">// 只注册实现车辆契约的类</span></span><br><span class="line">           <span class="keyword">if</span>(v.drive &amp;&amp; !v.breakDown) &#123;</span><br><span class="line">               types[type] = Vehicle;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">return</span> AbstractVehicleFactory;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   &#125;)()</span><br><span class="line">   </span><br><span class="line">   AbstractVehicleFactory.registerVehicle(<span class="string">'car'</span>, Car);</span><br><span class="line">   AbstractVehicleFactory.registerVehicle(<span class="string">'truck'</span>, Truck);</span><br><span class="line">   </span><br><span class="line">   <span class="comment">// 基于抽象车辆类型示例化一个新car对象</span></span><br><span class="line">   <span class="keyword">var</span> car1 = AbstractVehicleFactory.getVehicle(<span class="string">'car'</span>, &#123;</span><br><span class="line">   color: <span class="string">'lime green'</span>,</span><br><span class="line">   state: <span class="string">'like new'</span>,</span><br><span class="line">   &#125;)</span><br><span class="line">   </span><br><span class="line">   <span class="comment">// 同理实例化一个新truck对象</span></span><br><span class="line">   <span class="keyword">var</span> truck1 = AbstractVehicleFactory.getVehicle(<span class="string">'truck'</span>, &#123;</span><br><span class="line">   wheelSize: <span class="string">'medium'</span>,</span><br><span class="line">   color: <span class="string">'neon yellow'</span>,</span><br><span class="line">   &#125;)</span><br><span class="line">   </span><br><span class="line">   <span class="built_in">console</span>.log(car1);</span><br><span class="line">   <span class="built_in">console</span>.log(truck1)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+
+    
+      
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/js设计模式/" rel="tag"># js设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/24/javaScript设计模式-外观模式/" rel="next" title="javaScript设计模式-Facade（外观）模式">
+                <i class="fa fa-chevron-left"></i> javaScript设计模式-Facade（外观）模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  
+    <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="blue">
+  
+  <p class="site-author-name" itemprop="name">blue</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+
+
+  <nav class="site-state motion-element">
+    
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+
+    
+
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+          
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Factory模式是另一种创建型模式，涉及创建对象的概念。其分类不同于其他模式的地方在于它不是显式地要求使用一个构造函数。而Factory可以提供一个通用的接口来创建对象，我们可以指定我们所希望创建的工厂对象的类型"><span class="nav-number">1.</span> <span class="nav-text">Factory模式是另一种创建型模式，涉及创建对象的概念。其分类不同于其他模式的地方在于它不是显式地要求使用一个构造函数。而Factory可以提供一个通用的接口来创建对象，我们可以指定我们所希望创建的工厂对象的类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#何时使用Factory模式"><span class="nav-number">2.</span> <span class="nav-text">何时使用Factory模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#何时不应使用Factory模式"><span class="nav-number">3.</span> <span class="nav-text">何时不应使用Factory模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Abstract-Factory（抽象工厂）"><span class="nav-number">4.</span> <span class="nav-text">Abstract Factory（抽象工厂）</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-fas fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">blue</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  
+
+  
+
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// GET RESPONSIVE HEIGHT PASSED FROM IFRAME
+
+window.addEventListener("message", function(e) {
+  var data = e.data;
+  if ((typeof data === 'string') && (data.indexOf('ciu_embed') > -1)) {
+    var featureID = data.split(':')[1];
+    var height = data.split(':')[2];
+    $(`iframe[data-feature=${featureID}]`).height(parseInt(height) + 30);
+  }
+}, false);
+</script>
+
+
+
+
+
+
+
+
+  
+
+</body>
+</html>
