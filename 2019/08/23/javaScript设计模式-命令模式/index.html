@@ -99,18 +99,18 @@
   };
 </script>
 
-  <meta name="description" content="原文出自冴羽的博客 定义计算机科学中，局部应用是指固定一个函数的一些参数，然后产生另一个更小元的函数，什么是元？元是指函数参数的个数，比如一个带有两个参数的函数被称为二元函数 下面是个简单的例子 12345678910function add(a, b) &amp;#123;    return a + b;&amp;#125;// 执行add函数，一次传递两个参数add(1, 2);// 假设有一个partia">
-<meta name="keywords" content="javaScript基础">
+  <meta name="description" content="Command（命令）模式Command 模式旨在将方法调用、请求或操作封装到单一对象中，从而根据我们不同的请求对客户进行参数化和传递可供执行的方法调用。 Command 模式背后的主要思想是：它为我们提供了一种分离职责的手段，这些职责包括从执行命令的任意地方发布命令以及将该职责转而委托给不同对象。 实施明智的、简单的命令对象把 action 动作和调用该动作的对象绑定在一起。它们始终包括一个执行">
+<meta name="keywords" content="js设计模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaScript之偏函数">
-<meta property="og:url" content="http://yoursite.com/2019/08/05/JavaScript之偏函数/index.html">
+<meta property="og:title" content="javaScript设计模式-命令模式">
+<meta property="og:url" content="http://yoursite.com/2019/08/23/javaScript设计模式-命令模式/index.html">
 <meta property="og:site_name" content="blue的个人博客">
-<meta property="og:description" content="原文出自冴羽的博客 定义计算机科学中，局部应用是指固定一个函数的一些参数，然后产生另一个更小元的函数，什么是元？元是指函数参数的个数，比如一个带有两个参数的函数被称为二元函数 下面是个简单的例子 12345678910function add(a, b) &amp;#123;    return a + b;&amp;#125;// 执行add函数，一次传递两个参数add(1, 2);// 假设有一个partia">
+<meta property="og:description" content="Command（命令）模式Command 模式旨在将方法调用、请求或操作封装到单一对象中，从而根据我们不同的请求对客户进行参数化和传递可供执行的方法调用。 Command 模式背后的主要思想是：它为我们提供了一种分离职责的手段，这些职责包括从执行命令的任意地方发布命令以及将该职责转而委托给不同对象。 实施明智的、简单的命令对象把 action 动作和调用该动作的对象绑定在一起。它们始终包括一个执行">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-06T00:16:25.596Z">
+<meta property="og:updated_time" content="2019-08-24T08:47:27.341Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaScript之偏函数">
-<meta name="twitter:description" content="原文出自冴羽的博客 定义计算机科学中，局部应用是指固定一个函数的一些参数，然后产生另一个更小元的函数，什么是元？元是指函数参数的个数，比如一个带有两个参数的函数被称为二元函数 下面是个简单的例子 12345678910function add(a, b) &amp;#123;    return a + b;&amp;#125;// 执行add函数，一次传递两个参数add(1, 2);// 假设有一个partia">
+<meta name="twitter:title" content="javaScript设计模式-命令模式">
+<meta name="twitter:description" content="Command（命令）模式Command 模式旨在将方法调用、请求或操作封装到单一对象中，从而根据我们不同的请求对客户进行参数化和传递可供执行的方法调用。 Command 模式背后的主要思想是：它为我们提供了一种分离职责的手段，这些职责包括从执行命令的任意地方发布命令以及将该职责转而委托给不同对象。 实施明智的、简单的命令对象把 action 动作和调用该动作的对象绑定在一起。它们始终包括一个执行">
 
 
 
@@ -118,7 +118,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/2019/08/05/JavaScript之偏函数/">
+  <link rel="canonical" href="http://yoursite.com/2019/08/23/javaScript设计模式-命令模式/">
 
 
 
@@ -129,7 +129,7 @@
 </script>
 
   
-  <title>JavaScript之偏函数 | blue的个人博客</title>
+  <title>javaScript设计模式-命令模式 | blue的个人博客</title>
   
 
 
@@ -338,7 +338,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/05/JavaScript之偏函数/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/23/javaScript设计模式-命令模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="blue">
@@ -355,7 +355,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JavaScript之偏函数
+          <h1 class="post-title" itemprop="name headline">javaScript设计模式-命令模式
 
               
             
@@ -381,7 +381,7 @@
                 
               
 
-              <time title="创建时间：2019-08-05 22:54:49" itemprop="dateCreated datePublished" datetime="2019-08-05T22:54:49+08:00">2019-08-05</time>
+              <time title="创建时间：2019-08-23 12:45:16" itemprop="dateCreated datePublished" datetime="2019-08-23T12:45:16+08:00">2019-08-23</time>
             </span>
           
 
@@ -396,7 +396,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-08-06 08:16:25" itemprop="dateModified" datetime="2019-08-06T08:16:25+08:00">2019-08-06</time>
+                <time title="修改时间：2019-08-24 16:47:27" itemprop="dateModified" datetime="2019-08-24T16:47:27+08:00">2019-08-24</time>
               </span>
             
           
@@ -438,26 +438,22 @@
       
 
       
-        <p><a href="https://github.com/mqyqingfeng/Blog/issues/43" target="_blank" rel="noopener">原文出自冴羽的博客</a></p>
-<h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>计算机科学中，局部应用是指固定一个函数的一些参数，然后产生另一个更小元的函数，什么是元？元是指函数参数的个数，比如一个带有两个参数的函数被称为二元函数</p>
-<p>下面是个简单的例子</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 执行add函数，一次传递两个参数</span></span><br><span class="line">add(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 假设有一个partial函数可以做到局部应用</span></span><br><span class="line"><span class="keyword">var</span> addOne = partial(add, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">addOne(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+        <h4 id="Command（命令）模式"><a href="#Command（命令）模式" class="headerlink" title="Command（命令）模式"></a>Command（命令）模式</h4><p>Command 模式旨在将方法调用、请求或操作封装到单一对象中，从而根据我们不同的请求对客户进行参数化和传递可供执行的方法调用。</p>
+<p>Command 模式背后的主要思想是：它为我们提供了一种分离职责的手段，这些职责包括从执行命令的任意地方发布命令以及将该职责转而委托给不同对象。</p>
+<p>实施明智的、简单的命令对象把 action 动作和调用该动作的对象绑定在一起。它们始终包括一个执行操作。所有具有相同接口的 Command 对象可以根据需要轻松交换，这被认为是该模式的一个更大好处。</p>
+<p>这里是一个简单的汽车购买服务</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">var</span> CarManager = &#123;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 请求信息</span></span><br><span class="line">			requestInfo: <span class="function"><span class="keyword">function</span>(<span class="params">model, id</span>) </span>&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="string">"The information fro "</span> + model + <span class="string">" with ID"</span> + id + <span class="string">" is foobar"</span>;</span><br><span class="line">			&#125;,</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 订购汽车</span></span><br><span class="line">			buyVehicle: <span class="function"><span class="keyword">function</span>(<span class="params">model, id</span>) </span>&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="string">"You have successfully purchased Item"</span> + id + <span class="string">", a "</span> + model;</span><br><span class="line">			&#125;,</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 组织一个view</span></span><br><span class="line">			arrangeViewing: <span class="function"><span class="keyword">function</span>(<span class="params">model, id</span>) </span>&#123;</span><br><span class="line">				arrangeViewing: <span class="function"><span class="keyword">function</span>(<span class="params">model, id</span>) </span>&#123;</span><br><span class="line">					<span class="keyword">return</span> <span class="string">"You have successfully booked a viewing of "</span> + model + <span class="string">"("</span>+id+<span class="string">")"</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		&#125;;</span><br><span class="line">	&#125;)()</span><br></pre></td></tr></table></figure>
 
-<p>柯里化和局部应用(偏函数)<br>这个片函数和柯里化如此的相似，两者之间的区别在哪呢？</p>
-<p>柯里化是将一个多参数函数转换成多个单参数函数，也就是将一个n元函数转换成n个一元函数。<br>偏函数则是固定一个函数的一个或者多个参数，也就是将一个n元函数转换成一个 n - x 元函数。</p>
-<p>两者之间的的关系：柯里化是自动的偏函数的应用</p>
-<h4 id="partial"><a href="#partial" class="headerlink" title="partial"></a>partial</h4><p>今天的目的就是模仿underscore写一个partial函数，比起curry函数，这个会显得简单些</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> addOne = add.bind(<span class="literal">null</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">addOne(<span class="number">2</span>) <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+<p>上面的代码，它可以通过直接访问对象轻松地调用我们的的CarManager方法。从技术上讲，它是完全有效的JavaScript。然而，它在有些情况下可能是不利的。</p>
+<p>如果CarManager里的核心API改变了会怎么样？ 这将要求程序里所有直接访问这些方法的对象都需要进行修改。这可能被视为一个耦合层，它实际上最大程度地违反了松耦合对象的OOP方法论。我们可以进一步抽象API来解决这个问题。</p>
+<p>现在让我们来扩展CarManager，这样Command模式下的应用程序会产生如下结果：接受任意可以在CarManager对象上执行的命名方法，传递可以使用的任意数据，如CarModel（模型）和ID</p>
+<p>这时我们希望能够实现的内容: <code>CarManager.execute(&quot;buyVehicle&quot;, &quot;Food Escort&quot;, &quot;453543&quot;)</code>;</p>
+<p>按照这个结构，我们现在应该为CarManager.execute方法添加一个定义，如下所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CarManager.execute = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> CarManager[name] &amp;&amp; CarManager[name].apply(CarManager, [].slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>但是使用了bind之后，this的指向发生了改变，我们需要写一个不改变this指向的方法</p>
-<h4 id="第一版"><a href="#第一版" class="headerlink" title="第一版"></a>第一版</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">partial</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">       <span class="keyword">var</span> args = [].slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line">       <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">           <span class="keyword">var</span> newArgs = args.concat([].slice.call(<span class="built_in">arguments</span>));</span><br><span class="line">           <span class="comment">// 这里this指向obj</span></span><br><span class="line">           <span class="keyword">return</span> fn.apply(<span class="keyword">this</span>, newArgs);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b + <span class="keyword">this</span>.value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// var addOne = add.bind(null, 1); //传递null时在非严格模式下指向window</span></span><br><span class="line">    <span class="keyword">var</span> addOne = partial(add, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> value = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">var</span> obj = &#123;</span><br><span class="line">        value: <span class="number">2</span>,</span><br><span class="line">        addOne: addOne</span><br><span class="line">    &#125;</span><br><span class="line">    obj.addOne(<span class="number">2</span>); <span class="comment">// ???</span></span><br><span class="line">    <span class="comment">// 使用 bind 时，结果为 4</span></span><br><span class="line">    <span class="comment">// 使用 partial 时，结果为 5</span></span><br></pre></td></tr></table></figure>
+<p>最终的示例调用看起来时这样的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CarManager.execute(<span class="string">"arrangerViewing"</span>, <span class="string">"Ferrari"</span>, <span class="string">"14523"</span>);</span><br><span class="line">CarManager.execute(<span class="string">"requestInfo"</span>, <span class="string">"Ford Mondeo"</span>, <span class="string">"54323"</span>);</span><br><span class="line">CarManager.execute(<span class="string">"requestInfo"</span>, <span class="string">"Ford Escort"</span>, <span class="string">"322232"</span>);</span><br><span class="line">CarManager.execute(<span class="string">"buyVehicle"</span>, <span class="string">"Ford Eecort"</span>, <span class="string">"223343"</span>);</span><br></pre></td></tr></table></figure>
 
-<h4 id="第二版"><a href="#第二版" class="headerlink" title="第二版"></a>第二版</h4><p>像curry函数可以使用占位符一样，我们希望partial函数也可以实现这个功能</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _ = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">partial</span>(<span class="params">fn</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> args = [].slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> position = <span class="number">0</span>, len = args.length;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; len; i ++) &#123;</span><br><span class="line">            args[i] = args[i] === _ ? <span class="built_in">arguments</span>[position++] : args[i]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 验证</span></span><br><span class="line"><span class="keyword">var</span> subtract = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123; <span class="keyword">return</span> b - a; &#125;;</span><br><span class="line">subFrom20 = partial(subtract, _, <span class="number">20</span>);</span><br><span class="line">subFrom20(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>underscore 和 lodash 都提供了 partial函数， 但是只有lodash提供了curry函数。</p>
-</blockquote>
 
       
     </div>
@@ -488,7 +484,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/javaScript基础/" rel="tag"># javaScript基础</a>
+            <a href="/tags/js设计模式/" rel="tag"># js设计模式</a>
           
         </div>
       
@@ -501,8 +497,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/05/Jmeter之HTTP协议/" rel="next" title="HTTP协议">
-                <i class="fa fa-chevron-left"></i> HTTP协议
+              <a href="/2019/08/22/javaScript设计模式-原型模式/" rel="next" title="javaScript设计模式-原型模式">
+                <i class="fa fa-chevron-left"></i> javaScript设计模式-原型模式
               </a>
             
           </div>
@@ -510,10 +506,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/06/javaScript之惰性函数/" rel="prev" title="javaScript之惰性函数">
-                javaScript之惰性函数 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -647,7 +639,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#定义"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#partial"><span class="nav-number">2.</span> <span class="nav-text">partial</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第一版"><span class="nav-number">3.</span> <span class="nav-text">第一版</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二版"><span class="nav-number">4.</span> <span class="nav-text">第二版</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Command（命令）模式"><span class="nav-number">1.</span> <span class="nav-text">Command（命令）模式</span></a></li></ol></div>
             
 
           </div>
