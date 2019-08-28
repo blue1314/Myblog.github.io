@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    search: {
+      root: '/',
+      path: ''
+    },
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    }
+  };
+</script>
+
+  <meta name="description" content="Decorator（装饰者）模式Decorator 是一种结构设计模式，旨在促进代码复用。于 Mixin 相类似，它们可以被认为是另一可行对象子类化的替代方案。 通常，Decorator 提供了将行为动态添加至系统的现有类的能力。 装饰者可以用于修改现有的系统，希望在系统中为对象添加额外的功能，而不需要大量修改实用它们的底层代码。 Decorator 模式并不严重依赖于创建对象的方式，而是关注扩展">
+<meta name="keywords" content="js设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javaScript设计模式-Decorator（装饰者）模式">
+<meta property="og:url" content="http://yoursite.com/2019/08/24/javaScript设计模式-装饰者模式/index.html">
+<meta property="og:site_name" content="blue的个人博客">
+<meta property="og:description" content="Decorator（装饰者）模式Decorator 是一种结构设计模式，旨在促进代码复用。于 Mixin 相类似，它们可以被认为是另一可行对象子类化的替代方案。 通常，Decorator 提供了将行为动态添加至系统的现有类的能力。 装饰者可以用于修改现有的系统，希望在系统中为对象添加额外的功能，而不需要大量修改实用它们的底层代码。 Decorator 模式并不严重依赖于创建对象的方式，而是关注扩展">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-26T14:42:40.840Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="javaScript设计模式-Decorator（装饰者）模式">
+<meta name="twitter:description" content="Decorator（装饰者）模式Decorator 是一种结构设计模式，旨在促进代码复用。于 Mixin 相类似，它们可以被认为是另一可行对象子类化的替代方案。 通常，Decorator 提供了将行为动态添加至系统的现有类的能力。 装饰者可以用于修改现有的系统，希望在系统中为对象添加额外的功能，而不需要大量修改实用它们的底层代码。 Decorator 模式并不严重依赖于创建对象的方式，而是关注扩展">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/08/24/javaScript设计模式-装饰者模式/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  
+  <title>javaScript设计模式-Decorator（装饰者）模式 | blue的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">blue的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">每天学习进步，贵在坚持</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/javaScript设计模式-装饰者模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="blue">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="blue的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">javaScript设计模式-Decorator（装饰者）模式
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-24 21:08:28" itemprop="dateCreated datePublished" datetime="2019-08-24T21:08:28+08:00">2019-08-24</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-26 22:42:40" itemprop="dateModified" datetime="2019-08-26T22:42:40+08:00">2019-08-26</time>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          
+
+          <br>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Decorator（装饰者）模式"><a href="#Decorator（装饰者）模式" class="headerlink" title="Decorator（装饰者）模式"></a>Decorator（装饰者）模式</h4><p>Decorator 是一种结构设计模式，旨在促进代码复用。于 Mixin 相类似，它们可以被认为是另一可行对象子类化的替代方案。</p>
+<p>通常，Decorator 提供了将行为动态添加至系统的现有类的能力。</p>
+<p>装饰者可以用于修改现有的系统，希望在系统中为对象添加额外的功能，而不需要大量修改实用它们的底层代码。</p>
+<p>Decorator 模式并不严重依赖于创建对象的方式，而是关注扩展其额外功能。我们实用了一个单一的基本对象并逐步添加提供额外功能的 decorator 对象，而不是仅仅依赖原型继承。这个想法是：向基本对象添加（装饰）属性或方法，而不是进行子类化，因此它较为精简。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 车辆vehicle构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">vehicle</span>(<span class="params">vehicleType</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 默认值</span></span><br><span class="line">  <span class="keyword">this</span>.vehicleType = vehicleType;</span><br><span class="line">  <span class="keyword">this</span>.model = <span class="string">"default"</span>;</span><br><span class="line">  <span class="keyword">this</span>.license = <span class="string">"00000-00"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试基本的vehicle实例</span></span><br><span class="line"><span class="keyword">var</span> testInstance = <span class="keyword">new</span> vehicle(<span class="string">"car"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(testInstance);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个vehicle实例进行装饰</span></span><br><span class="line"><span class="keyword">var</span> truck = <span class="keyword">new</span> vehicle(<span class="string">"truck"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 给truck装饰新的功能</span></span><br><span class="line">truck.setModel = <span class="function"><span class="keyword">function</span>(<span class="params">modelName</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.model = modelName;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">truck.setColor = <span class="function"><span class="keyword">function</span>(<span class="params">color</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.color = color;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 测试赋值操作是否正常工作</span></span><br><span class="line">truck.setModel(<span class="string">"CAT"</span>);</span><br><span class="line">truck.setColor(<span class="string">"blue"</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(truck);</span><br><span class="line"><span class="comment">// 下面的代码，展示vehicle依然是不被改变的</span></span><br><span class="line"><span class="keyword">var</span> secondInstance = <span class="keyword">new</span> vehicle(<span class="string">"car"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(secondInstance);</span><br></pre></td></tr></table></figure>
+
+<p>这种类型的简单实现是可行的，但它并不能真正证明装饰者所提供的所有又是。为此，首先要查以下改编的咖啡示例，该示例来自 Freeman、Sierra 和 Bates 所著的一本名《深入浅出设计模式》书籍，它围绕的是模拟购买苹果笔记本。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 被装饰的对象构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">MacBook</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.cost = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">100</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">this</span>.screenSize = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">11.6</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 装饰器1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Memory</span>(<span class="params">macbook</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> v = macbook.cost();</span><br><span class="line">  macbook.cost = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> v + <span class="number">75</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 装饰器2</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Engraving</span>(<span class="params">mackbook</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> v = mackbook.cost();</span><br><span class="line"></span><br><span class="line">  mackbook.cost = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> v + <span class="number">200</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 装饰器3</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Insurance</span>(<span class="params">mackbook</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> v = mackbook.cost();</span><br><span class="line">  mackbook.cost = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> v + <span class="number">250</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> mb = <span class="keyword">new</span> MacBook();</span><br><span class="line">Memory(mb);</span><br><span class="line"><span class="built_in">console</span>.log(mb.cost()); <span class="comment">// 175</span></span><br><span class="line"></span><br><span class="line">Engraving(mb);</span><br><span class="line"><span class="built_in">console</span>.log(mb.cost()); <span class="comment">// 375</span></span><br><span class="line">Insurance(mb);</span><br><span class="line"><span class="built_in">console</span>.log(mb.cost()); <span class="comment">// 625</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(mb.screenSize()); <span class="comment">// 11.6</span></span><br></pre></td></tr></table></figure>
+
+<p>在这个示例中，Decorator 重写 MacBoook()超类对象的 cost()函数返回 MacBook 的当前价格加上特定的升级价格。</p>
+<p>我们认为装饰作为并没有重写原始 Macbook 对象的构造函数方法（如 screenSize()），为 Mackbook 定义的其他属性也一样，依然保持不变完好无损。</p>
+<h4 id="伪经典-Decorator（装饰者）"><a href="#伪经典-Decorator（装饰者）" class="headerlink" title="伪经典 Decorator（装饰者）"></a>伪经典 Decorator（装饰者）</h4><h5 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h5><p>《JavaScript 设计模式》(PJDP)将 Decorator 模式描述为一种用于在相同接口的其他对象内部透明地包装对象的模式。接口应该是对象定义方法的一种方式，但是，它实际上并不直接指定如何实现这些方法。</p>
+<p>下面是使用鸭子类型在 Javascript 中实现接口的一个示例，这种方法帮助确定一个对象是否基于实现方法的构造函数/对象的实例。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义一个静态方法来实现接口与实现类的直接检验</span></span><br><span class="line"><span class="comment">//静态方法不要写出Interface.prototype ,因为这是写到接口的原型链上的</span></span><br><span class="line"><span class="comment">//我们要把静态的函数直接写到类层次上</span></span><br><span class="line"><span class="comment">//定义一个接口类</span></span><br><span class="line"><span class="keyword">var</span> Interface = <span class="function"><span class="keyword">function</span>(<span class="params">name, methods</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//name：接口名字</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">arguments</span>.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">    alert(<span class="string">"必须是两个参数"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">this</span>.name = name;</span><br><span class="line">  <span class="keyword">this</span>.methods = []; <span class="comment">//定义一个空数组装载函数名</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; methods.length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> methods[i] != <span class="string">"string"</span>) &#123;</span><br><span class="line">      alert(<span class="string">"函数名必须是字符串类型"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.methods.push(methods[i]);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">Interface.ensureImplement = <span class="function"><span class="keyword">function</span>(<span class="params">object</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">arguments</span>.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"参数必须不少于2个"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt; <span class="built_in">arguments</span>.length; i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> inter = <span class="built_in">arguments</span>[i];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果是接口就必须是Interface类型</span></span><br><span class="line">    <span class="keyword">if</span> (inter.constructor != Interface) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"如果是接口类的话，就必须是Interface类型"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//判断接口中的方法是否全部实现</span></span><br><span class="line">    <span class="comment">//遍历函数集合分析</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; inter.methods.length; j++) &#123;</span><br><span class="line">      <span class="keyword">var</span> method = inter.methods[j]; <span class="comment">//接口中所有函数</span></span><br><span class="line">      <span class="comment">//object[method]传入的函数</span></span><br><span class="line">      <span class="comment">//最终是判断传入的函数是否与接口中所用函数匹配</span></span><br><span class="line">      <span class="keyword">if</span> (!object[method] || <span class="keyword">typeof</span> object[method] != <span class="string">"function"</span>) &#123;</span><br><span class="line">        <span class="comment">//实现类中必须有方法名字与接口中所用方法名相同</span></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"实现类中没有完全实现接口中的所有方法"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> reminder = <span class="keyword">new</span> Interface(<span class="string">"List"</span>, [<span class="string">"summary"</span>, <span class="string">"placeOrder"</span>]);</span><br><span class="line"><span class="built_in">console</span>.log(reminder);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> properties = &#123;</span><br><span class="line">  name: <span class="string">"Remember to buy the milk"</span>,</span><br><span class="line">  date: <span class="string">"05/06/2016"</span>,</span><br><span class="line">  actions: &#123;</span><br><span class="line">    summary: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"Remember to buy the milk, we are almost out!"</span>;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    placeOrder: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"Ordering milk from your local grocery store"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Todo</span>(<span class="params">config</span>) </span>&#123;</span><br><span class="line">  Interface.ensureImplement(config.actions, reminder);</span><br><span class="line">  <span class="keyword">this</span>.name = config.name;</span><br><span class="line">  <span class="keyword">this</span>.methods = config.actions;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> todoItem = <span class="keyword">new</span> Todo(properties);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(todoItem.methods.summary()); <span class="comment">//Remember to buy the milk, we are almost out!</span></span><br><span class="line"><span class="built_in">console</span>.log(todoItem.methods.placeOrder()); <span class="comment">//Ordering milk from your local grocery store</span></span><br></pre></td></tr></table></figure>
+
+<p>接口的最大问题是，在 Javascript 中没有为它们提供内置支持，试图模仿可能不太合适的另外一中语言特点是有风险的。可以在不花费大量性能成本的情况下使用享元接口，下面继续看一下使用相同概念的抽象装饰者。</p>
+<h4 id="抽象-Decorator（抽象装饰者）"><a href="#抽象-Decorator（抽象装饰者）" class="headerlink" title="抽象 Decorator（抽象装饰者）"></a>抽象 Decorator（抽象装饰者）</h4><p>为了演示改版本的 Decorator 模式的结构，假设我们有一个超类，再次模拟 Macbook，以及模拟一个商店允许我们“装饰”苹果笔记本并收取增强功能的额外费用。</p>
+<p>增强功能可以包括将内存升级到 8GB、雕刻、Parallels 或外壳。如果为每个增强选项组合使用单个子类来模拟它，看起来可能就是这样的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Macbook = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> MacbookWith8GBRamAndParallels = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">    MacbookWith8GBRamAndParallelsAndCase = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;,</span><br><span class="line">    MacbookWith8GBRamAndParallelsAndCaseAndInsurance = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>这是一个不切实际的方案，这里我们试着使用装饰者来更好解决这个问题。</p>
+<p>我们只需要创建五个新的装饰者类，而不是需要之前看到的所有组合。在这些增强类上调用的方法将被传递给 Macbook 类。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Macbook = <span class="keyword">new</span> Interface(<span class="string">"Macbook"</span>,[</span><br><span class="line">		</span><br><span class="line">			<span class="string">"addEngraving"</span>,</span><br><span class="line">			<span class="string">"addParallels"</span>,</span><br><span class="line">			<span class="string">"add8GBRam"</span>,</span><br><span class="line">			<span class="string">"addCase"</span>,</span><br><span class="line">		]);</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">var</span> MacbookPro = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">			<span class="comment">// 实现 Macbook</span></span><br><span class="line">		&#125;;</span><br><span class="line">		</span><br><span class="line">		MacbookPro.prototype = &#123;</span><br><span class="line">			addEngraving: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				<span class="comment">// console.log('addEngraving')</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">'addEngraving'</span>;</span><br><span class="line">			&#125;,</span><br><span class="line">			addParallels: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				<span class="built_in">console</span>.log(<span class="string">'addParallels'</span>);</span><br><span class="line">			&#125;,</span><br><span class="line">			add8GBRam: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				<span class="built_in">console</span>.log(<span class="string">'add8GBRam'</span>);</span><br><span class="line">			&#125;,</span><br><span class="line">			addCase: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				<span class="built_in">console</span>.log(<span class="string">"addCase"</span>);</span><br><span class="line">				<span class="keyword">return</span> <span class="string">'addCase'</span>;</span><br><span class="line">			&#125;,</span><br><span class="line">			getPrice: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="comment">// 基本价格</span></span><br><span class="line">				<span class="keyword">return</span> <span class="number">900.00</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// Macbook装饰者抽象装饰者类</span></span><br><span class="line">		<span class="keyword">var</span> MacbookDecorator = <span class="function"><span class="keyword">function</span>(<span class="params">macbook</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(mackbook)</span><br><span class="line">			Interface.ensureImplement(macbook, Macbook);</span><br><span class="line">			<span class="keyword">this</span>.macbook = macbook;</span><br><span class="line">		&#125;;</span><br><span class="line">		</span><br><span class="line">		MacbookDecorator.prototype = &#123;</span><br><span class="line">			addEngraving: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">this</span>.macbook.addEngraving();</span><br><span class="line">			&#125;,</span><br><span class="line">			</span><br><span class="line">			addParallels: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">this</span>.macbook.addParallels();</span><br><span class="line">			&#125;,</span><br><span class="line">			</span><br><span class="line">			add8GBRam: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">this</span>.macbook.add8GBRam();</span><br><span class="line">			&#125;,</span><br><span class="line">			</span><br><span class="line">			addCase: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">this</span>.macbook.addCase();</span><br><span class="line">			&#125;,</span><br><span class="line">			</span><br><span class="line">			getPrice: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">this</span>.macbook.getPrice();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    * 上面的示例演示的是：Macbook decorator接受一个对象作为组件。它使用了我们前面定义的Macbook接口，针对每个方法，在组件上会调用相同的方法。我们现在可以仅通过使用MacbookDecorator创建选项类；简单调用超类构造函数，必要时可以重写任何方法。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">subClass, superClass</span>) </span>&#123;</span><br><span class="line">		  <span class="keyword">var</span> F = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">		  F.prototype = superClass.prototype;</span><br><span class="line">		  subClass.prototype = <span class="keyword">new</span> F();</span><br><span class="line">		  subClass.prototype.constructor = subClass;</span><br><span class="line">		</span><br><span class="line">		  subClass.superclass = superClass.prototype;</span><br><span class="line">		  <span class="keyword">if</span>(superClass.prototype.constructor == <span class="built_in">Object</span>.prototype.constructor) &#123;</span><br><span class="line">		    superClass.prototype.constructor = superClass;</span><br><span class="line">		  &#125;</span><br><span class="line">		&#125; </span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> CaseDecorator =  <span class="function"><span class="keyword">function</span>(<span class="params">macbook</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// this.__proto__.constructor === CaseDecorator</span></span><br><span class="line">        <span class="comment">//接下来调用超类的构造函数</span></span><br><span class="line">		CaseDecorator.superclass.constructor(macbook);</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// 扩展超类</span></span><br><span class="line">	extend(CaseDecorator, MacbookDecorator);</span><br><span class="line">    </span><br><span class="line">	CaseDecorator.prototype.addCase = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.macbook.addCase() + <span class="string">" Adding case to macbook"</span>;</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">	CaseDecorator.prototype.getPrice = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.macbook.getPrice() + <span class="number">45.00</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 正如我们可以看到的，其中大部份内容都是很容易实现的。我们所做的是重写需要装饰的 addCase() 和 getPrice()方法，首先执行改组件的原有方法，然后加上额外的内容。</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 实例化mackbook</span></span><br><span class="line">	<span class="keyword">var</span> myMacbookPro = <span class="keyword">new</span> MacbookPro();</span><br><span class="line">	<span class="built_in">console</span>.log(myMacbookPro.getPrice());</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//装饰macbook</span></span><br><span class="line">	myMacbookPro = <span class="keyword">new</span> CaseDecorator(myMacbookPro);</span><br><span class="line">	<span class="built_in">console</span>.log(myMacbookPro)</span><br><span class="line">	<span class="built_in">console</span>.log(myMacbookPro.getPrice())</span><br><span class="line">	<span class="built_in">console</span>.log(myMacbookPro.addCase())</span><br><span class="line">	<span class="built_in">console</span>.log(myMacbookPro.addEngraving())</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用jQuery的装饰者"><a href="#使用jQuery的装饰者" class="headerlink" title="使用jQuery的装饰者"></a>使用jQuery的装饰者</h4><p>与我们涉及到的其他模式一样，也有一些使用jQuery实现的装饰者模式的示例。jQuery.extend()允许我们在运行时或者在随后一个点上动态地将两个或两个以上的对象（和它们的属性）一起扩展（或合并）为一个单一对象。</p>
+<p>在这种情况下，一个目标对象可以用新功能来装饰，而不会在源/超类对象中破坏或重写现有的方法</p>
+<p>接下来的示例有三个对象：defaults、options和settings。该任务的目的是为了装饰defaults对象，将options中的额外功能附加到defaults上。我们必须首先使defaults保持未接触状态，并且保持稍后可以访问其属性或函数的能力，然后，给defaults赋予使用装饰属性和函数的能力，这些装饰属性和函数是从options里获取来的；</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> decoratorApp = decoratorApp || &#123;&#125;;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// 定义要使用的对象</span></span><br><span class="line">	decoratorApp = &#123;</span><br><span class="line">		defaults: &#123;</span><br><span class="line">			validate: <span class="literal">false</span>,</span><br><span class="line">			limit: <span class="number">5</span>,</span><br><span class="line">			name: <span class="string">'foo'</span>,</span><br><span class="line">			welcome: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				<span class="built_in">console</span>.log(<span class="string">'welcome'</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		</span><br><span class="line">		options: &#123;</span><br><span class="line">			validate: <span class="literal">true</span>,</span><br><span class="line">			name: <span class="string">'bar'</span>,</span><br><span class="line">			helloWorld: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">				<span class="built_in">console</span>.log(<span class="string">'hello world'</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		</span><br><span class="line">		settings: &#123;&#125;,</span><br><span class="line">		</span><br><span class="line">		printObj: <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">			<span class="keyword">var</span> arr = [],</span><br><span class="line">				next;</span><br><span class="line">			$.each(obj, <span class="function"><span class="keyword">function</span>(<span class="params">key, val</span>) </span>&#123;</span><br><span class="line">				next = key + <span class="string">": "</span>;</span><br><span class="line">				next += $.isPlainObject(val) ? printObj(val) : val;</span><br><span class="line">				arr.push(next);</span><br><span class="line">			&#125;);</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"&#123; "</span> + arr.join(<span class="string">", "</span>) + <span class="string">'&#125;'</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// 合并defaults和options，没有显示的修改defaults</span></span><br><span class="line">	decoratorApp.settings = $.extend(&#123;&#125;, decoratorApp.defaults, decoratorApp.options);</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// 这里所做的就是装饰可以访问defaults属性和功能的方式(options也一样)，defaults本身未做出改变</span></span><br><span class="line">	$(<span class="string">"#log"</span>).append(decoratorApp.printObj(decoratorApp.settings) + <span class="string">'&lt;br/&gt;'</span> + decoratorApp.printObj(decoratorApp.options) + <span class="string">'&lt;br/&gt;'</span>+ decoratorApp.printObj(decoratorApp.defaults));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//&#123; validate: true, limit: 5, name: bar, welcome: function() &#123; console.log('welcome'); &#125;, helloWorld: function() &#123; console.log('hello world'); &#125;&#125;</span></span><br><span class="line">   <span class="comment">// &#123; validate: true, name: bar, helloWorld: function() &#123; console.log('hello world'); &#125;&#125;</span></span><br><span class="line">   <span class="comment">// &#123; validate: false, limit: 5, name: foo, welcome: function() &#123; console.log('welcome'); &#125;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="优点和缺点"><a href="#优点和缺点" class="headerlink" title="优点和缺点"></a>优点和缺点</h4><p>对象可以被新行为包装或“装饰”，然后可以被继续使用，而不必担心被修改的基本对象。在一个更广泛的上下文中，这种模式也使我们不必依靠大量的子类来获得同样的好处。</p>
+<p>如果管理不当，它会极大的复杂化应用程序架构，因为它向我们的命名空间引入了很多小型但类似的对象。</p>
+
+      
+    </div>
+
+    
+
+    
+      
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/js设计模式/" rel="tag"># js设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/24/javaScript设计模式-Mixin模式/" rel="next" title="javaScript设计模式-Mixin模式">
+                <i class="fa fa-chevron-left"></i> javaScript设计模式-Mixin模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/27/javaScript设计模式-享元模式/" rel="prev" title="javaScript设计模式-FlyWeight（享元）模式">
+                javaScript设计模式-FlyWeight（享元）模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  
+    <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="blue">
+  
+  <p class="site-author-name" itemprop="name">blue</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+
+
+  <nav class="site-state motion-element">
+    
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+
+    
+
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+          
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Decorator（装饰者）模式"><span class="nav-number">1.</span> <span class="nav-text">Decorator（装饰者）模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#伪经典-Decorator（装饰者）"><span class="nav-number">2.</span> <span class="nav-text">伪经典 Decorator（装饰者）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#接口"><span class="nav-number">2.1.</span> <span class="nav-text">接口</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象-Decorator（抽象装饰者）"><span class="nav-number">3.</span> <span class="nav-text">抽象 Decorator（抽象装饰者）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用jQuery的装饰者"><span class="nav-number">4.</span> <span class="nav-text">使用jQuery的装饰者</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优点和缺点"><span class="nav-number">5.</span> <span class="nav-text">优点和缺点</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-fas fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">blue</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  
+
+  
+
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// GET RESPONSIVE HEIGHT PASSED FROM IFRAME
+
+window.addEventListener("message", function(e) {
+  var data = e.data;
+  if ((typeof data === 'string') && (data.indexOf('ciu_embed') > -1)) {
+    var featureID = data.split(':')[1];
+    var height = data.split(':')[2];
+    $(`iframe[data-feature=${featureID}]`).height(parseInt(height) + 30);
+  }
+}, false);
+</script>
+
+
+
+
+
+
+
+
+  
+
+</body>
+</html>
